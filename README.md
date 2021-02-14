@@ -26,6 +26,6 @@ mypy yyyy_mm_dd
 If you want to regenerate docs:
 
 ```
-pip install pdoc
-pdoc --html yyyy_mm_dd
+pip install pdoc3
+pdoc --html -o ./docs yyyy_mm_dd
 ```
