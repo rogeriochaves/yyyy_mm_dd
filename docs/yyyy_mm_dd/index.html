@@ -458,6 +458,40 @@ def hour(yyyy_mm_dd: str) -&gt; int:
     date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%dT%H&#34;)
     return date.hour
 
+def yyyymmdd_to_yyyy_mm_dd(yyyymmdd: str) -&gt; str:
+    &#34;&#34;&#34;
+    Converts a yyyymmdd date format to yyyy-mm-dd date format
+
+    &gt;&gt;&gt; yyyymmdd_to_yyyy_mm_dd(&#39;20200514&#39;)
+    &#39;2020-05-14&#39;
+    &#34;&#34;&#34;
+    return datetime.datetime.strptime(yyyymmdd, &#34;%Y%m%d&#34;).strftime(&#34;%Y-%m-%d&#34;)
+
+
+def yyyy_mm_dd_to_yyyymmdd(yyyy_mm_dd: str) -&gt; str:
+    &#34;&#34;&#34;
+    Converts a yyyymmdd date format to yyyy-mm-dd date format
+
+    &gt;&gt;&gt; yyyy_mm_dd_to_yyyymmdd(&#39;2020-05-14&#39;)
+    &#39;20200514&#39;
+    &#34;&#34;&#34;
+    return datetime.datetime.strptime(yyyy_mm_dd, &#34;%Y-%m-%d&#34;).strftime(&#34;%Y%m%d&#34;)
+
+
+def to_datetime(yyyy_mm_dd: str) -&gt; datetime.datetime:
+    &#34;&#34;&#34;
+    Converts any partial or full yyyy-mm-ddThh:mm:ss to python datetime
+
+    &gt;&gt;&gt; to_datetime(&#39;2020-05&#39;)
+    datetime.datetime(2020, 5, 1, 0, 0)
+    &gt;&gt;&gt; to_datetime(&#39;2020-05-14&#39;)
+    datetime.datetime(2020, 5, 14, 0, 0)
+    &gt;&gt;&gt; to_datetime(&#39;2020-05-14T10:20:30&#39;)
+    datetime.datetime(2020, 5, 14, 10, 20, 30)
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
+    return date
+
 
 def _parse(yyyy_mm_dd: str, at_least: str) -&gt; Tuple[datetime.datetime, str]:
     &#34;&#34;&#34;
@@ -1224,6 +1258,37 @@ True
     return &#34;%sT00:00:00&#34; % date.strftime(&#34;%Y-%m-%d&#34;)</code></pre>
 </details>
 </dd>
+<dt id="yyyy_mm_dd.to_datetime"><code class="name flex">
+<span>def <span class="ident">to_datetime</span></span>(<span>yyyy_mm_dd: str) ‑> datetime.datetime</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Converts any partial or full yyyy-mm-ddThh:mm:ss to python datetime</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; to_datetime('2020-05')
+datetime.datetime(2020, 5, 1, 0, 0)
+&gt;&gt;&gt; to_datetime('2020-05-14')
+datetime.datetime(2020, 5, 14, 0, 0)
+&gt;&gt;&gt; to_datetime('2020-05-14T10:20:30')
+datetime.datetime(2020, 5, 14, 10, 20, 30)
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_datetime(yyyy_mm_dd: str) -&gt; datetime.datetime:
+    &#34;&#34;&#34;
+    Converts any partial or full yyyy-mm-ddThh:mm:ss to python datetime
+
+    &gt;&gt;&gt; to_datetime(&#39;2020-05&#39;)
+    datetime.datetime(2020, 5, 1, 0, 0)
+    &gt;&gt;&gt; to_datetime(&#39;2020-05-14&#39;)
+    datetime.datetime(2020, 5, 14, 0, 0)
+    &gt;&gt;&gt; to_datetime(&#39;2020-05-14T10:20:30&#39;)
+    datetime.datetime(2020, 5, 14, 10, 20, 30)
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
+    return date</code></pre>
+</details>
+</dd>
 <dt id="yyyy_mm_dd.today"><code class="name flex">
 <span>def <span class="ident">today</span></span>(<span>) ‑> str</span>
 </code></dt>
@@ -1382,6 +1447,50 @@ True
     return date.strftime(&#34;%Y-%m-%d&#34;)</code></pre>
 </details>
 </dd>
+<dt id="yyyy_mm_dd.yyyy_mm_dd_to_yyyymmdd"><code class="name flex">
+<span>def <span class="ident">yyyy_mm_dd_to_yyyymmdd</span></span>(<span>yyyy_mm_dd: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Converts a yyyymmdd date format to yyyy-mm-dd date format</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; yyyy_mm_dd_to_yyyymmdd('2020-05-14')
+'20200514'
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def yyyy_mm_dd_to_yyyymmdd(yyyy_mm_dd: str) -&gt; str:
+    &#34;&#34;&#34;
+    Converts a yyyymmdd date format to yyyy-mm-dd date format
+
+    &gt;&gt;&gt; yyyy_mm_dd_to_yyyymmdd(&#39;2020-05-14&#39;)
+    &#39;20200514&#39;
+    &#34;&#34;&#34;
+    return datetime.datetime.strptime(yyyy_mm_dd, &#34;%Y-%m-%d&#34;).strftime(&#34;%Y%m%d&#34;)</code></pre>
+</details>
+</dd>
+<dt id="yyyy_mm_dd.yyyymmdd_to_yyyy_mm_dd"><code class="name flex">
+<span>def <span class="ident">yyyymmdd_to_yyyy_mm_dd</span></span>(<span>yyyymmdd: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Converts a yyyymmdd date format to yyyy-mm-dd date format</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; yyyymmdd_to_yyyy_mm_dd('20200514')
+'2020-05-14'
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def yyyymmdd_to_yyyy_mm_dd(yyyymmdd: str) -&gt; str:
+    &#34;&#34;&#34;
+    Converts a yyyymmdd date format to yyyy-mm-dd date format
+
+    &gt;&gt;&gt; yyyymmdd_to_yyyy_mm_dd(&#39;20200514&#39;)
+    &#39;2020-05-14&#39;
+    &#34;&#34;&#34;
+    return datetime.datetime.strptime(yyyymmdd, &#34;%Y%m%d&#34;).strftime(&#34;%Y-%m-%d&#34;)</code></pre>
+</details>
+</dd>
 </dl>
 </section>
 <section>
@@ -1419,6 +1528,7 @@ True
 <li><code><a title="yyyy_mm_dd.start_of_yyyy" href="#yyyy_mm_dd.start_of_yyyy">start_of_yyyy</a></code></li>
 <li><code><a title="yyyy_mm_dd.start_of_yyyy_mm" href="#yyyy_mm_dd.start_of_yyyy_mm">start_of_yyyy_mm</a></code></li>
 <li><code><a title="yyyy_mm_dd.start_of_yyyy_mm_dd" href="#yyyy_mm_dd.start_of_yyyy_mm_dd">start_of_yyyy_mm_dd</a></code></li>
+<li><code><a title="yyyy_mm_dd.to_datetime" href="#yyyy_mm_dd.to_datetime">to_datetime</a></code></li>
 <li><code><a title="yyyy_mm_dd.today" href="#yyyy_mm_dd.today">today</a></code></li>
 <li><code><a title="yyyy_mm_dd.tomorrow" href="#yyyy_mm_dd.tomorrow">tomorrow</a></code></li>
 <li><code><a title="yyyy_mm_dd.year" href="#yyyy_mm_dd.year">year</a></code></li>
@@ -1426,6 +1536,8 @@ True
 <li><code><a title="yyyy_mm_dd.yyyy" href="#yyyy_mm_dd.yyyy">yyyy</a></code></li>
 <li><code><a title="yyyy_mm_dd.yyyy_mm" href="#yyyy_mm_dd.yyyy_mm">yyyy_mm</a></code></li>
 <li><code><a title="yyyy_mm_dd.yyyy_mm_dd" href="#yyyy_mm_dd.yyyy_mm_dd">yyyy_mm_dd</a></code></li>
+<li><code><a title="yyyy_mm_dd.yyyy_mm_dd_to_yyyymmdd" href="#yyyy_mm_dd.yyyy_mm_dd_to_yyyymmdd">yyyy_mm_dd_to_yyyymmdd</a></code></li>
+<li><code><a title="yyyy_mm_dd.yyyymmdd_to_yyyy_mm_dd" href="#yyyy_mm_dd.yyyymmdd_to_yyyy_mm_dd">yyyymmdd_to_yyyy_mm_dd</a></code></li>
 </ul>
 </li>
 </ul>

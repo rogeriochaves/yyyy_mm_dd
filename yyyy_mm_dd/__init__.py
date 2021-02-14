@@ -430,6 +430,40 @@ def hour(yyyy_mm_dd: str) -> int:
     date, _ = _parse(yyyy_mm_dd, at_least="%Y-%m-%dT%H")
     return date.hour
 
+def yyyymmdd_to_yyyy_mm_dd(yyyymmdd: str) -> str:
+    """
+    Converts a yyyymmdd date format to yyyy-mm-dd date format
+
+    >>> yyyymmdd_to_yyyy_mm_dd('20200514')
+    '2020-05-14'
+    """
+    return datetime.datetime.strptime(yyyymmdd, "%Y%m%d").strftime("%Y-%m-%d")
+
+
+def yyyy_mm_dd_to_yyyymmdd(yyyy_mm_dd: str) -> str:
+    """
+    Converts a yyyymmdd date format to yyyy-mm-dd date format
+
+    >>> yyyy_mm_dd_to_yyyymmdd('2020-05-14')
+    '20200514'
+    """
+    return datetime.datetime.strptime(yyyy_mm_dd, "%Y-%m-%d").strftime("%Y%m%d")
+
+
+def to_datetime(yyyy_mm_dd: str) -> datetime.datetime:
+    """
+    Converts any partial or full yyyy-mm-ddThh:mm:ss to python datetime
+
+    >>> to_datetime('2020-05')
+    datetime.datetime(2020, 5, 1, 0, 0)
+    >>> to_datetime('2020-05-14')
+    datetime.datetime(2020, 5, 14, 0, 0)
+    >>> to_datetime('2020-05-14T10:20:30')
+    datetime.datetime(2020, 5, 14, 10, 20, 30)
+    """
+    date, _ = _parse(yyyy_mm_dd, at_least="%Y")
+    return date
+
 
 def _parse(yyyy_mm_dd: str, at_least: str) -> Tuple[datetime.datetime, str]:
     """
