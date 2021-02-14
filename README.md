@@ -1,6 +1,8 @@
 # yyyy_mm_dd
 
-Helper functions for easy string-based manipulation of dates in python
+Easy string-based date manipulation library for Python
+
+[Documentation](https://rogeriochaves.github.io/yyyy_mm_dd/yyyy_mm_dd/index.html)
 
 DRAFT
 
