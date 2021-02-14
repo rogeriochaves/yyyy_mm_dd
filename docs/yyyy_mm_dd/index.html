@@ -30,7 +30,7 @@
 from dateutil.relativedelta import relativedelta
 import re
 import math
-from typing import Tuple
+from typing import Tuple, Union
 
 
 def today() -&gt; str:
@@ -73,7 +73,7 @@ def now() -&gt; str:
     return datetime.datetime.now().strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;)
 
 
-def move_yyyy(yyyy_mm_dd: str, by: int) -&gt; str:
+def move_yyyy(yyyy_mm_dd: Union[str, datetime.date], by: int) -&gt; str:
     &#34;&#34;&#34;
     Increases or decreases a date by a certain number of years
 
@@ -87,13 +87,17 @@ def move_yyyy(yyyy_mm_dd: str, by: int) -&gt; str:
     &#39;2021-02-14&#39;
     &gt;&gt;&gt; move_yyyy(&#39;2020-02-14T10:20:30&#39;, 1)
     &#39;2021-02-14T10:20:30&#39;
+    &gt;&gt;&gt; move_yyyy(datetime.date(2020, 2, 14), 1)
+    &#39;2021-02-14&#39;
+    &gt;&gt;&gt; move_yyyy(datetime.datetime(2020, 2, 14, 0, 0), 1)
+    &#39;2021-02-14T00:00:00&#39;
     &#34;&#34;&#34;
     date, pattern = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
     date += relativedelta(years=by)
     return date.strftime(pattern)
 
 
-def move_yyyy_mm(yyyy_mm_dd: str, by: int) -&gt; str:
+def move_yyyy_mm(yyyy_mm_dd: Union[str, datetime.date], by: int) -&gt; str:
     &#34;&#34;&#34;
     Increases or decreases a date by a certain number of months
 
@@ -105,13 +109,17 @@ def move_yyyy_mm(yyyy_mm_dd: str, by: int) -&gt; str:
     &#39;2021-01-14&#39;
     &gt;&gt;&gt; move_yyyy_mm(&#39;2020-02-14T10:20:30&#39;, 1)
     &#39;2020-03-14T10:20:30&#39;
+    &gt;&gt;&gt; move_yyyy_mm(datetime.date(2020, 2, 14), 1)
+    &#39;2020-03-14&#39;
+    &gt;&gt;&gt; move_yyyy_mm(datetime.datetime(2020, 2, 14, 0, 0), 1)
+    &#39;2020-03-14T00:00:00&#39;
     &#34;&#34;&#34;
     date, pattern = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m&#34;)
     date += relativedelta(months=by)
     return date.strftime(pattern)
 
 
-def move_yyyy_mm_dd(yyyy_mm_dd: str, by: int) -&gt; str:
+def move_yyyy_mm_dd(yyyy_mm_dd: Union[str, datetime.date], by: int) -&gt; str:
     &#34;&#34;&#34;
     Increases or decreases a date by a certain number of days
 
@@ -121,13 +129,17 @@ def move_yyyy_mm_dd(yyyy_mm_dd: str, by: int) -&gt; str:
     &#39;2020-12-30&#39;
     &gt;&gt;&gt; move_yyyy_mm_dd(&#39;2020-02-29T10:20:30&#39;, 1)
     &#39;2020-03-01T10:20:30&#39;
+    &gt;&gt;&gt; move_yyyy_mm_dd(datetime.date(2020, 2, 29), 1)
+    &#39;2020-03-01&#39;
+    &gt;&gt;&gt; move_yyyy_mm_dd(datetime.datetime(2020, 2, 29, 0, 0), 1)
+    &#39;2020-03-01T00:00:00&#39;
     &#34;&#34;&#34;
     date, pattern = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%d&#34;)
     date += relativedelta(days=by)
     return date.strftime(pattern)
 
 
-def move_yyyy_mm_dd_hh(yyyy_mm_dd_hh_mm_ss: str, by: int) -&gt; str:
+def move_yyyy_mm_dd_hh(yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime], by: int) -&gt; str:
     &#34;&#34;&#34;
     Increases or decreases a datetime by a certain number of hours
 
@@ -137,13 +149,15 @@ def move_yyyy_mm_dd_hh(yyyy_mm_dd_hh_mm_ss: str, by: int) -&gt; str:
     &#39;2020-12-31T22&#39;
     &gt;&gt;&gt; move_yyyy_mm_dd_hh(&#39;2020-02-29T10:20:30&#39;, 1)
     &#39;2020-02-29T11:20:30&#39;
+    &gt;&gt;&gt; move_yyyy_mm_dd_hh(datetime.datetime(2020, 2, 29, 10, 20, 30), 1)
+    &#39;2020-02-29T11:20:30&#39;
     &#34;&#34;&#34;
     date, pattern = _parse(yyyy_mm_dd_hh_mm_ss, at_least=&#34;%Y-%m-%dT%H&#34;)
     date += relativedelta(hours=by)
     return date.strftime(pattern)
 
 
-def move_yyyy_mm_dd_hh_mm(yyyy_mm_dd_hh_mm_ss: str, by: int) -&gt; str:
+def move_yyyy_mm_dd_hh_mm(yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime], by: int) -&gt; str:
     &#34;&#34;&#34;
     Increases or decreases a datetime by a certain number of minutes
 
@@ -153,13 +167,15 @@ def move_yyyy_mm_dd_hh_mm(yyyy_mm_dd_hh_mm_ss: str, by: int) -&gt; str:
     &#39;2020-12-31T23:58&#39;
     &gt;&gt;&gt; move_yyyy_mm_dd_hh_mm(&#39;2020-02-29T10:20:30&#39;, 1)
     &#39;2020-02-29T10:21:30&#39;
+    &gt;&gt;&gt; move_yyyy_mm_dd_hh_mm(datetime.datetime(2020, 2, 29, 10, 20, 30), 1)
+    &#39;2020-02-29T10:21:30&#39;
     &#34;&#34;&#34;
     date, pattern = _parse(yyyy_mm_dd_hh_mm_ss, at_least=&#34;%Y-%m-%dT%H:%M&#34;)
     date += relativedelta(minutes=by)
     return date.strftime(pattern)
 
 
-def move_yyyy_mm_dd_hh_mm_ss(yyyy_mm_dd_hh_mm_ss: str, by: int) -&gt; str:
+def move_yyyy_mm_dd_hh_mm_ss(yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime], by: int) -&gt; str:
     &#34;&#34;&#34;
     Increases or decreases a datetime by a certain number of seconds
 
@@ -167,31 +183,35 @@ def move_yyyy_mm_dd_hh_mm_ss(yyyy_mm_dd_hh_mm_ss: str, by: int) -&gt; str:
     &#39;2021-01-01T00:00:00&#39;
     &gt;&gt;&gt; move_yyyy_mm_dd_hh_mm_ss(&#39;2020-12-31T23:59:59&#39;, -1)
     &#39;2020-12-31T23:59:58&#39;
+    &gt;&gt;&gt; move_yyyy_mm_dd_hh_mm_ss(datetime.datetime(2020, 2, 29, 10, 20, 30), 1)
+    &#39;2020-02-29T10:20:31&#39;
     &#34;&#34;&#34;
     date, pattern = _parse(yyyy_mm_dd_hh_mm_ss, at_least=&#34;%Y-%m-%dT%H:%M:%S&#34;)
     date += relativedelta(seconds=by)
     return date.strftime(pattern)
 
 
-def diff_yyyy(a: str, b: str) -&gt; int:
+def diff_yyyy(a: Union[str, datetime.date], b: Union[str, datetime.date]) -&gt; int:
     &#34;&#34;&#34;
     Returns the amount of years between date A and date B
 
-    &gt;&gt;&gt; diff_yyyy(&#34;2020&#34;, &#34;2020&#34;)
-    0
+    &gt;&gt;&gt; diff_yyyy(&#34;2020&#34;, &#34;2021&#34;)
+    1
     &gt;&gt;&gt; diff_yyyy(&#34;2020-02&#34;, &#34;2020-08&#34;)
     0
     &gt;&gt;&gt; diff_yyyy(&#34;2020-02-14T10:20:30&#34;, &#34;2021-02-14T10:20:30&#34;)
     1
     &gt;&gt;&gt; diff_yyyy(&#34;2021-02-14T10:20:30&#34;, &#34;2020-02-14T10:20:30&#34;)
     -1
+    &gt;&gt;&gt; diff_yyyy(datetime.date(2020, 2, 14), datetime.date(2022, 2, 14))
+    2
     &#34;&#34;&#34;
     date_a, _ = _parse(a, at_least=&#34;%Y&#34;)
     date_b, _ = _parse(b, at_least=&#34;%Y&#34;)
     return relativedelta(date_b, date_a).years
 
 
-def diff_yyyy_mm(a: str, b: str) -&gt; int:
+def diff_yyyy_mm(a: Union[str, datetime.date], b: Union[str, datetime.date]) -&gt; int:
     &#34;&#34;&#34;
     Returns the amount of months between date A and date B
 
@@ -201,13 +221,15 @@ def diff_yyyy_mm(a: str, b: str) -&gt; int:
     12
     &gt;&gt;&gt; diff_yyyy_mm(&#34;2020-02-14T10:20:30&#34;, &#34;2020-01-14T10:20:30&#34;)
     -1
+    &gt;&gt;&gt; diff_yyyy_mm(datetime.date(2020, 2, 14), datetime.date(2020, 4, 14))
+    2
     &#34;&#34;&#34;
     date_a, _ = _parse(a, at_least=&#34;%Y-%m&#34;)
     date_b, _ = _parse(b, at_least=&#34;%Y-%m&#34;)
     return relativedelta(date_b, date_a).years * 12 + relativedelta(date_b, date_a).months
 
 
-def diff_yyyy_mm_dd(a: str, b: str) -&gt; int:
+def diff_yyyy_mm_dd(a: Union[str, datetime.date], b: Union[str, datetime.date]) -&gt; int:
     &#34;&#34;&#34;
     Returns the amount of days between date A and date B
 
@@ -219,13 +241,15 @@ def diff_yyyy_mm_dd(a: str, b: str) -&gt; int:
     -1
     &gt;&gt;&gt; diff_yyyy_mm_dd(&#34;2020-02-14T10&#34;, &#34;2020-02-15T09&#34;)
     0
+    &gt;&gt;&gt; diff_yyyy_mm_dd(datetime.date(2020, 2, 14), datetime.date(2020, 2, 16))
+    2
     &#34;&#34;&#34;
     date_a, _ = _parse(a, at_least=&#34;%Y-%m-%d&#34;)
     date_b, _ = _parse(b, at_least=&#34;%Y-%m-%d&#34;)
     return (date_b - date_a).days
 
 
-def diff_yyyy_mm_dd_hh(a: str, b: str) -&gt; int:
+def diff_yyyy_mm_dd_hh(a: Union[str, datetime.datetime], b: Union[str, datetime.datetime]) -&gt; int:
     &#34;&#34;&#34;
     Returns the amount of hours between datetime A and datetime B
 
@@ -237,13 +261,15 @@ def diff_yyyy_mm_dd_hh(a: str, b: str) -&gt; int:
     -1
     &gt;&gt;&gt; diff_yyyy_mm_dd_hh(&#34;2020-02-14T10:30&#34;, &#34;2020-02-14T11:29&#34;)
     0
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh(datetime.datetime(2020, 2, 14, 10, 20, 30), datetime.datetime(2020, 2, 14, 12, 20, 30))
+    2
     &#34;&#34;&#34;
     date_a, _ = _parse(a, at_least=&#34;%Y-%m-%dT%H&#34;)
     date_b, _ = _parse(b, at_least=&#34;%Y-%m-%dT%H&#34;)
     return math.floor((date_b - date_a).total_seconds() / 3600)
 
 
-def diff_yyyy_mm_dd_hh_mm(a: str, b: str) -&gt; int:
+def diff_yyyy_mm_dd_hh_mm(a: Union[str, datetime.datetime], b: Union[str, datetime.datetime]) -&gt; int:
     &#34;&#34;&#34;
     Returns the amount of minutes between datetime A and datetime B
 
@@ -255,13 +281,15 @@ def diff_yyyy_mm_dd_hh_mm(a: str, b: str) -&gt; int:
     -1
     &gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm(&#34;2020-02-14T10:30&#34;, &#34;2020-02-14T10:30:30&#34;)
     0
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm(datetime.datetime(2020, 2, 14, 10, 20, 30), datetime.datetime(2020, 2, 14, 10, 22, 30))
+    2
     &#34;&#34;&#34;
     date_a, _ = _parse(a, at_least=&#34;%Y-%m-%dT%H:%M&#34;)
     date_b, _ = _parse(b, at_least=&#34;%Y-%m-%dT%H:%M&#34;)
     return math.floor((date_b - date_a).total_seconds() / 60)
 
 
-def diff_yyyy_mm_dd_hh_mm_ss(a: str, b: str) -&gt; int:
+def diff_yyyy_mm_dd_hh_mm_ss(a: Union[str, datetime.datetime], b: Union[str, datetime.datetime]) -&gt; int:
     &#34;&#34;&#34;
     Returns the amount of seconds between datetime A and datetime B
 
@@ -271,13 +299,15 @@ def diff_yyyy_mm_dd_hh_mm_ss(a: str, b: str) -&gt; int:
     31622400
     &gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm_ss(&#34;2020-02-14T10:20:30&#34;, &#34;2020-02-14T10:20:29&#34;)
     -1
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm_ss(datetime.datetime(2020, 2, 14, 10, 20, 30), datetime.datetime(2020, 2, 14, 10, 20, 32))
+    2
     &#34;&#34;&#34;
     date_a, _ = _parse(a, at_least=&#34;%Y-%m-%dT%H:%M:%S&#34;)
     date_b, _ = _parse(b, at_least=&#34;%Y-%m-%dT%H:%M:%S&#34;)
     return math.floor((date_b - date_a).total_seconds())
 
 
-def start_of_yyyy(yyyy_mm_dd: str) -&gt; str:
+def start_of_yyyy(yyyy_mm_dd: Union[str, datetime.date]) -&gt; str:
     &#34;&#34;&#34;
     Returns first day of the year of a given date
 
@@ -285,13 +315,15 @@ def start_of_yyyy(yyyy_mm_dd: str) -&gt; str:
     &#39;2020-01-01&#39;
     &gt;&gt;&gt; start_of_yyyy(&#39;2020-05-14&#39;)
     &#39;2020-01-01&#39;
+    &gt;&gt;&gt; start_of_yyyy(datetime.date(2020, 5, 14))
+    &#39;2020-01-01&#39;
     &#34;&#34;&#34;
     date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
 
     return &#34;%s-01-01&#34; % date.strftime(&#34;%Y&#34;)
 
 
-def start_of_yyyy_mm(yyyy_mm_dd: str) -&gt; str:
+def start_of_yyyy_mm(yyyy_mm_dd: Union[str, datetime.date]) -&gt; str:
     &#34;&#34;&#34;
     Returns first day of the month of a given date
 
@@ -299,13 +331,15 @@ def start_of_yyyy_mm(yyyy_mm_dd: str) -&gt; str:
     &#39;2020-05-01&#39;
     &gt;&gt;&gt; start_of_yyyy_mm(&#39;2020-05-14&#39;)
     &#39;2020-05-01&#39;
+    &gt;&gt;&gt; start_of_yyyy_mm(datetime.date(2020, 5, 14))
+    &#39;2020-05-01&#39;
     &#34;&#34;&#34;
     date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m&#34;)
 
     return &#34;%s-01&#34; % date.strftime(&#34;%Y-%m&#34;)
 
 
-def start_of_yyyy_mm_dd(yyyy_mm_dd: str) -&gt; str:
+def start_of_yyyy_mm_dd(yyyy_mm_dd: Union[str, datetime.date]) -&gt; str:
     &#34;&#34;&#34;
     Returns first datetime of the day of a given date
 
@@ -313,13 +347,15 @@ def start_of_yyyy_mm_dd(yyyy_mm_dd: str) -&gt; str:
     &#39;2020-05-14T00:00:00&#39;
     &gt;&gt;&gt; start_of_yyyy_mm_dd(&#39;2020-05-14T13:25:10&#39;)
     &#39;2020-05-14T00:00:00&#39;
+    &gt;&gt;&gt; start_of_yyyy_mm_dd(datetime.date(2020, 5, 14))
+    &#39;2020-05-14T00:00:00&#39;
     &#34;&#34;&#34;
     date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%d&#34;)
 
     return &#34;%sT00:00:00&#34; % date.strftime(&#34;%Y-%m-%d&#34;)
 
 
-def end_of_yyyy(yyyy_mm_dd: str) -&gt; str:
+def end_of_yyyy(yyyy_mm_dd: Union[str, datetime.date]) -&gt; str:
     &#34;&#34;&#34;
     Returns last day of the year of a given date
 
@@ -327,13 +363,15 @@ def end_of_yyyy(yyyy_mm_dd: str) -&gt; str:
     &#39;2020-12-31&#39;
     &gt;&gt;&gt; end_of_yyyy(&#39;2020-05-14&#39;)
     &#39;2020-12-31&#39;
+    &gt;&gt;&gt; end_of_yyyy(datetime.date(2020, 5, 14))
+    &#39;2020-12-31&#39;
     &#34;&#34;&#34;
     date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
 
     return &#34;%s-12-31&#34; % date.strftime(&#34;%Y&#34;)
 
 
-def end_of_yyyy_mm(yyyy_mm_dd: str) -&gt; str:
+def end_of_yyyy_mm(yyyy_mm_dd: Union[str, datetime.date]) -&gt; str:
     &#34;&#34;&#34;
     Returns last day of the month of a given date
 
@@ -341,12 +379,14 @@ def end_of_yyyy_mm(yyyy_mm_dd: str) -&gt; str:
     &#39;2020-02-29&#39;
     &gt;&gt;&gt; end_of_yyyy_mm(&#39;2020-05-14&#39;)
     &#39;2020-05-31&#39;
+    &gt;&gt;&gt; end_of_yyyy_mm(datetime.date(2020, 5, 14))
+    &#39;2020-05-31&#39;
     &#34;&#34;&#34;
 
     return move_yyyy_mm_dd(start_of_yyyy_mm(move_yyyy_mm(yyyy_mm_dd, 1)), -1)
 
 
-def end_of_yyyy_mm_dd(yyyy_mm_dd: str) -&gt; str:
+def end_of_yyyy_mm_dd(yyyy_mm_dd: Union[str, datetime.date]) -&gt; str:
     &#34;&#34;&#34;
     Returns last datetime of the day of a given date
 
@@ -354,68 +394,80 @@ def end_of_yyyy_mm_dd(yyyy_mm_dd: str) -&gt; str:
     &#39;2020-05-14T23:59:59&#39;
     &gt;&gt;&gt; end_of_yyyy_mm_dd(&#39;2020-05-14T13:25:10&#39;)
     &#39;2020-05-14T23:59:59&#39;
+    &gt;&gt;&gt; end_of_yyyy_mm_dd(datetime.date(2020, 5, 14))
+    &#39;2020-05-14T23:59:59&#39;
     &#34;&#34;&#34;
     date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
 
     return move_yyyy_mm_dd_hh_mm_ss(start_of_yyyy_mm_dd(move_yyyy_mm_dd(yyyy_mm_dd, 1)), -1)
 
 
-def yyyy(yyyy_mm_dd: str) -&gt; str:
+def yyyy(yyyy_mm_dd: Union[str, datetime.date]) -&gt; str:
     &#34;&#34;&#34;
     Extracts the year of a given date
 
     &gt;&gt;&gt; yyyy(&#39;2020-05-14&#39;)
+    &#39;2020&#39;
+    &gt;&gt;&gt; yyyy(datetime.date(2020, 5, 14))
     &#39;2020&#39;
     &#34;&#34;&#34;
     date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
     return date.strftime(&#34;%Y&#34;)
 
 
-def yyyy_mm(yyyy_mm_dd: str) -&gt; str:
+def yyyy_mm(yyyy_mm_dd: Union[str, datetime.date]) -&gt; str:
     &#34;&#34;&#34;
     Extracts the year and month of a given date
 
     &gt;&gt;&gt; yyyy_mm(&#39;2020-05-14&#39;)
+    &#39;2020-05&#39;
+    &gt;&gt;&gt; yyyy_mm(datetime.date(2020, 5, 14))
     &#39;2020-05&#39;
     &#34;&#34;&#34;
     date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m&#34;)
     return date.strftime(&#34;%Y-%m&#34;)
 
 
-def yyyy_mm_dd(yyyy_mm_dd: str) -&gt; str:
+def yyyy_mm_dd(yyyy_mm_dd: Union[str, datetime.date]) -&gt; str:
     &#34;&#34;&#34;
     Extracts the date of a given datetime
 
     &gt;&gt;&gt; yyyy_mm_dd(&#39;2020-05-14T10:20:30&#39;)
+    &#39;2020-05-14&#39;
+    &gt;&gt;&gt; yyyy_mm_dd(datetime.date(2020, 5, 14))
     &#39;2020-05-14&#39;
     &#34;&#34;&#34;
     date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%d&#34;)
     return date.strftime(&#34;%Y-%m-%d&#34;)
 
 
-def hh_mm_ss(yyyy_mm_dd: str) -&gt; str:
+def hh_mm_ss(yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime]) -&gt; str:
     &#34;&#34;&#34;
     Extracts the time of a given datetime
 
     &gt;&gt;&gt; hh_mm_ss(&#39;2020-05-14T10:20:30&#39;)
     &#39;10:20:30&#39;
+    &gt;&gt;&gt; hh_mm_ss(datetime.datetime(2020, 5, 14, 10, 20, 30))
+    &#39;10:20:30&#39;
     &#34;&#34;&#34;
-    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%dT%H:%M:%S&#34;)
+    date, _ = _parse(yyyy_mm_dd_hh_mm_ss, at_least=&#34;%Y-%m-%dT%H:%M:%S&#34;)
     return date.strftime(&#34;%H:%M:%S&#34;)
 
 
-def hh_mm(yyyy_mm_dd: str) -&gt; str:
+def hh_mm(yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime]) -&gt; str:
     &#34;&#34;&#34;
     Extracts the hour and minute of a given datetime
 
     &gt;&gt;&gt; hh_mm(&#39;2020-05-14T10:20:30&#39;)
     &#39;10:20&#39;
+    &gt;&gt;&gt; hh_mm(datetime.datetime(2020, 5, 14, 10, 20, 30))
+    &#39;10:20&#39;
     &#34;&#34;&#34;
-    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%dT%H:%M&#34;)
+    date, _ = _parse(yyyy_mm_dd_hh_mm_ss, at_least=&#34;%Y-%m-%dT%H:%M&#34;)
     return date.strftime(&#34;%H:%M&#34;)
 
 
-def year(yyyy_mm_dd: str) -&gt; int:
+def year(yyyy_mm_dd: Union[str, datetime.date]) -&gt; int:
     &#34;&#34;&#34;
     Extracts the year of a given date, similar to yyyy function but returns an int
 
@@ -426,7 +478,7 @@ def year(yyyy_mm_dd: str) -&gt; int:
     return date.year
 
 
-def month(yyyy_mm_dd: str) -&gt; int:
+def month(yyyy_mm_dd: Union[str, datetime.date]) -&gt; int:
     &#34;&#34;&#34;
     Extracts the month of a given date
 
@@ -437,7 +489,7 @@ def month(yyyy_mm_dd: str) -&gt; int:
     return date.month
 
 
-def day(yyyy_mm_dd: str) -&gt; int:
+def day(yyyy_mm_dd: Union[str, datetime.date]) -&gt; int:
     &#34;&#34;&#34;
     Extracts the day of a given date
 
@@ -448,37 +500,41 @@ def day(yyyy_mm_dd: str) -&gt; int:
     return date.day
 
 
-def hour(yyyy_mm_dd: str) -&gt; int:
+def hour(yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime]) -&gt; int:
     &#34;&#34;&#34;
     Extracts the hour of a given datetime
 
     &gt;&gt;&gt; hour(&#39;2020-05-14T05:10:58&#39;)
     5
     &#34;&#34;&#34;
-    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%dT%H&#34;)
+    date, _ = _parse(yyyy_mm_dd_hh_mm_ss, at_least=&#34;%Y-%m-%dT%H&#34;)
     return date.hour
 
-def yyyymmdd_to_yyyy_mm_dd(yyyymmdd: str) -&gt; str:
-    &#34;&#34;&#34;
-    Converts a yyyymmdd date format to yyyy-mm-dd date format
 
-    &gt;&gt;&gt; yyyymmdd_to_yyyy_mm_dd(&#39;20200514&#39;)
+def from_yyyymmdd(yyyymmdd: str) -&gt; str:
+    &#34;&#34;&#34;
+    Converts a yyyymmdd date format (no dashes) to yyyy-mm-dd date format (with dashes)
+
+    &gt;&gt;&gt; from_yyyymmdd(&#39;20200514&#39;)
     &#39;2020-05-14&#39;
     &#34;&#34;&#34;
     return datetime.datetime.strptime(yyyymmdd, &#34;%Y%m%d&#34;).strftime(&#34;%Y-%m-%d&#34;)
 
 
-def yyyy_mm_dd_to_yyyymmdd(yyyy_mm_dd: str) -&gt; str:
+def to_yyyymmdd(yyyy_mm_dd: Union[str, datetime.date]) -&gt; str:
     &#34;&#34;&#34;
-    Converts a yyyymmdd date format to yyyy-mm-dd date format
+    Converts any partial or full yyyy-mm-ddThh:mm:ss to yyyymmdd date format (no dashes)
 
-    &gt;&gt;&gt; yyyy_mm_dd_to_yyyymmdd(&#39;2020-05-14&#39;)
+    &gt;&gt;&gt; to_yyyymmdd(&#39;2020-05-14&#39;)
+    &#39;20200514&#39;
+    &gt;&gt;&gt; to_yyyymmdd(datetime.date(2020, 5, 14))
     &#39;20200514&#39;
     &#34;&#34;&#34;
-    return datetime.datetime.strptime(yyyy_mm_dd, &#34;%Y-%m-%d&#34;).strftime(&#34;%Y%m%d&#34;)
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
+    return date.strftime(&#34;%Y%m%d&#34;)
 
 
-def to_datetime(yyyy_mm_dd: str) -&gt; datetime.datetime:
+def to_datetime(yyyy_mm_dd: Union[str, datetime.date]) -&gt; datetime.datetime:
     &#34;&#34;&#34;
     Converts any partial or full yyyy-mm-ddThh:mm:ss to python datetime
 
@@ -493,7 +549,7 @@ def to_datetime(yyyy_mm_dd: str) -&gt; datetime.datetime:
     return date
 
 
-def _parse(yyyy_mm_dd: str, at_least: str) -&gt; Tuple[datetime.datetime, str]:
+def _parse(yyyy_mm_dd: Union[str, datetime.date, datetime.datetime], at_least: str) -&gt; Tuple[datetime.datetime, str]:
     &#34;&#34;&#34;
     &gt;&gt;&gt; _parse(&#39;foo&#39;, &#39;%Y&#39;)
     Traceback (most recent call last):
@@ -510,6 +566,11 @@ def _parse(yyyy_mm_dd: str, at_least: str) -&gt; Tuple[datetime.datetime, str]:
         ...
     ValueError: unconverted data remains: foobar
     &#34;&#34;&#34;
+    if isinstance(yyyy_mm_dd, datetime.datetime):
+        return (yyyy_mm_dd, &#34;%Y-%m-%dT%H:%M:%S&#34;)
+    if isinstance(yyyy_mm_dd, datetime.date):
+        return (datetime.datetime(yyyy_mm_dd.year, yyyy_mm_dd.month, yyyy_mm_dd.day), &#34;%Y-%m-%d&#34;)
+
     pattern = &#34;&#34;
     match = re.match(r&#34;(\d{4})?-?(\d{2})?-?(\d{2})?T?(\d{2})?:?(\d{2})?:?(\d{2})?&#34;, yyyy_mm_dd)
     if not match:
@@ -547,7 +608,7 @@ if __name__ == &#34;__main__&#34;:
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="yyyy_mm_dd.day"><code class="name flex">
-<span>def <span class="ident">day</span></span>(<span>yyyy_mm_dd: str) ‑> int</span>
+<span>def <span class="ident">day</span></span>(<span>yyyy_mm_dd: Union[str, datetime.date]) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Extracts the day of a given date</p>
@@ -558,7 +619,7 @@ if __name__ == &#34;__main__&#34;:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def day(yyyy_mm_dd: str) -&gt; int:
+<pre><code class="python">def day(yyyy_mm_dd: Union[str, datetime.date]) -&gt; int:
     &#34;&#34;&#34;
     Extracts the day of a given date
 
@@ -570,35 +631,39 @@ if __name__ == &#34;__main__&#34;:
 </details>
 </dd>
 <dt id="yyyy_mm_dd.diff_yyyy"><code class="name flex">
-<span>def <span class="ident">diff_yyyy</span></span>(<span>a: str, b: str) ‑> int</span>
+<span>def <span class="ident">diff_yyyy</span></span>(<span>a: Union[str, datetime.date], b: Union[str, datetime.date]) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the amount of years between date A and date B</p>
-<pre><code class="language-python-repl">&gt;&gt;&gt; diff_yyyy(&quot;2020&quot;, &quot;2020&quot;)
-0
+<pre><code class="language-python-repl">&gt;&gt;&gt; diff_yyyy(&quot;2020&quot;, &quot;2021&quot;)
+1
 &gt;&gt;&gt; diff_yyyy(&quot;2020-02&quot;, &quot;2020-08&quot;)
 0
 &gt;&gt;&gt; diff_yyyy(&quot;2020-02-14T10:20:30&quot;, &quot;2021-02-14T10:20:30&quot;)
 1
 &gt;&gt;&gt; diff_yyyy(&quot;2021-02-14T10:20:30&quot;, &quot;2020-02-14T10:20:30&quot;)
 -1
+&gt;&gt;&gt; diff_yyyy(datetime.date(2020, 2, 14), datetime.date(2022, 2, 14))
+2
 </code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def diff_yyyy(a: str, b: str) -&gt; int:
+<pre><code class="python">def diff_yyyy(a: Union[str, datetime.date], b: Union[str, datetime.date]) -&gt; int:
     &#34;&#34;&#34;
     Returns the amount of years between date A and date B
 
-    &gt;&gt;&gt; diff_yyyy(&#34;2020&#34;, &#34;2020&#34;)
-    0
+    &gt;&gt;&gt; diff_yyyy(&#34;2020&#34;, &#34;2021&#34;)
+    1
     &gt;&gt;&gt; diff_yyyy(&#34;2020-02&#34;, &#34;2020-08&#34;)
     0
     &gt;&gt;&gt; diff_yyyy(&#34;2020-02-14T10:20:30&#34;, &#34;2021-02-14T10:20:30&#34;)
     1
     &gt;&gt;&gt; diff_yyyy(&#34;2021-02-14T10:20:30&#34;, &#34;2020-02-14T10:20:30&#34;)
     -1
+    &gt;&gt;&gt; diff_yyyy(datetime.date(2020, 2, 14), datetime.date(2022, 2, 14))
+    2
     &#34;&#34;&#34;
     date_a, _ = _parse(a, at_least=&#34;%Y&#34;)
     date_b, _ = _parse(b, at_least=&#34;%Y&#34;)
@@ -606,7 +671,7 @@ if __name__ == &#34;__main__&#34;:
 </details>
 </dd>
 <dt id="yyyy_mm_dd.diff_yyyy_mm"><code class="name flex">
-<span>def <span class="ident">diff_yyyy_mm</span></span>(<span>a: str, b: str) ‑> int</span>
+<span>def <span class="ident">diff_yyyy_mm</span></span>(<span>a: Union[str, datetime.date], b: Union[str, datetime.date]) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the amount of months between date A and date B</p>
@@ -616,12 +681,14 @@ if __name__ == &#34;__main__&#34;:
 12
 &gt;&gt;&gt; diff_yyyy_mm(&quot;2020-02-14T10:20:30&quot;, &quot;2020-01-14T10:20:30&quot;)
 -1
+&gt;&gt;&gt; diff_yyyy_mm(datetime.date(2020, 2, 14), datetime.date(2020, 4, 14))
+2
 </code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def diff_yyyy_mm(a: str, b: str) -&gt; int:
+<pre><code class="python">def diff_yyyy_mm(a: Union[str, datetime.date], b: Union[str, datetime.date]) -&gt; int:
     &#34;&#34;&#34;
     Returns the amount of months between date A and date B
 
@@ -631,6 +698,8 @@ if __name__ == &#34;__main__&#34;:
     12
     &gt;&gt;&gt; diff_yyyy_mm(&#34;2020-02-14T10:20:30&#34;, &#34;2020-01-14T10:20:30&#34;)
     -1
+    &gt;&gt;&gt; diff_yyyy_mm(datetime.date(2020, 2, 14), datetime.date(2020, 4, 14))
+    2
     &#34;&#34;&#34;
     date_a, _ = _parse(a, at_least=&#34;%Y-%m&#34;)
     date_b, _ = _parse(b, at_least=&#34;%Y-%m&#34;)
@@ -638,7 +707,7 @@ if __name__ == &#34;__main__&#34;:
 </details>
 </dd>
 <dt id="yyyy_mm_dd.diff_yyyy_mm_dd"><code class="name flex">
-<span>def <span class="ident">diff_yyyy_mm_dd</span></span>(<span>a: str, b: str) ‑> int</span>
+<span>def <span class="ident">diff_yyyy_mm_dd</span></span>(<span>a: Union[str, datetime.date], b: Union[str, datetime.date]) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the amount of days between date A and date B</p>
@@ -650,12 +719,14 @@ if __name__ == &#34;__main__&#34;:
 -1
 &gt;&gt;&gt; diff_yyyy_mm_dd(&quot;2020-02-14T10&quot;, &quot;2020-02-15T09&quot;)
 0
+&gt;&gt;&gt; diff_yyyy_mm_dd(datetime.date(2020, 2, 14), datetime.date(2020, 2, 16))
+2
 </code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def diff_yyyy_mm_dd(a: str, b: str) -&gt; int:
+<pre><code class="python">def diff_yyyy_mm_dd(a: Union[str, datetime.date], b: Union[str, datetime.date]) -&gt; int:
     &#34;&#34;&#34;
     Returns the amount of days between date A and date B
 
@@ -667,6 +738,8 @@ if __name__ == &#34;__main__&#34;:
     -1
     &gt;&gt;&gt; diff_yyyy_mm_dd(&#34;2020-02-14T10&#34;, &#34;2020-02-15T09&#34;)
     0
+    &gt;&gt;&gt; diff_yyyy_mm_dd(datetime.date(2020, 2, 14), datetime.date(2020, 2, 16))
+    2
     &#34;&#34;&#34;
     date_a, _ = _parse(a, at_least=&#34;%Y-%m-%d&#34;)
     date_b, _ = _parse(b, at_least=&#34;%Y-%m-%d&#34;)
@@ -674,7 +747,7 @@ if __name__ == &#34;__main__&#34;:
 </details>
 </dd>
 <dt id="yyyy_mm_dd.diff_yyyy_mm_dd_hh"><code class="name flex">
-<span>def <span class="ident">diff_yyyy_mm_dd_hh</span></span>(<span>a: str, b: str) ‑> int</span>
+<span>def <span class="ident">diff_yyyy_mm_dd_hh</span></span>(<span>a: Union[str, datetime.datetime], b: Union[str, datetime.datetime]) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the amount of hours between datetime A and datetime B</p>
@@ -686,12 +759,14 @@ if __name__ == &#34;__main__&#34;:
 -1
 &gt;&gt;&gt; diff_yyyy_mm_dd_hh(&quot;2020-02-14T10:30&quot;, &quot;2020-02-14T11:29&quot;)
 0
+&gt;&gt;&gt; diff_yyyy_mm_dd_hh(datetime.datetime(2020, 2, 14, 10, 20, 30), datetime.datetime(2020, 2, 14, 12, 20, 30))
+2
 </code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def diff_yyyy_mm_dd_hh(a: str, b: str) -&gt; int:
+<pre><code class="python">def diff_yyyy_mm_dd_hh(a: Union[str, datetime.datetime], b: Union[str, datetime.datetime]) -&gt; int:
     &#34;&#34;&#34;
     Returns the amount of hours between datetime A and datetime B
 
@@ -703,6 +778,8 @@ if __name__ == &#34;__main__&#34;:
     -1
     &gt;&gt;&gt; diff_yyyy_mm_dd_hh(&#34;2020-02-14T10:30&#34;, &#34;2020-02-14T11:29&#34;)
     0
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh(datetime.datetime(2020, 2, 14, 10, 20, 30), datetime.datetime(2020, 2, 14, 12, 20, 30))
+    2
     &#34;&#34;&#34;
     date_a, _ = _parse(a, at_least=&#34;%Y-%m-%dT%H&#34;)
     date_b, _ = _parse(b, at_least=&#34;%Y-%m-%dT%H&#34;)
@@ -710,7 +787,7 @@ if __name__ == &#34;__main__&#34;:
 </details>
 </dd>
 <dt id="yyyy_mm_dd.diff_yyyy_mm_dd_hh_mm"><code class="name flex">
-<span>def <span class="ident">diff_yyyy_mm_dd_hh_mm</span></span>(<span>a: str, b: str) ‑> int</span>
+<span>def <span class="ident">diff_yyyy_mm_dd_hh_mm</span></span>(<span>a: Union[str, datetime.datetime], b: Union[str, datetime.datetime]) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the amount of minutes between datetime A and datetime B</p>
@@ -722,12 +799,14 @@ if __name__ == &#34;__main__&#34;:
 -1
 &gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm(&quot;2020-02-14T10:30&quot;, &quot;2020-02-14T10:30:30&quot;)
 0
+&gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm(datetime.datetime(2020, 2, 14, 10, 20, 30), datetime.datetime(2020, 2, 14, 10, 22, 30))
+2
 </code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def diff_yyyy_mm_dd_hh_mm(a: str, b: str) -&gt; int:
+<pre><code class="python">def diff_yyyy_mm_dd_hh_mm(a: Union[str, datetime.datetime], b: Union[str, datetime.datetime]) -&gt; int:
     &#34;&#34;&#34;
     Returns the amount of minutes between datetime A and datetime B
 
@@ -739,6 +818,8 @@ if __name__ == &#34;__main__&#34;:
     -1
     &gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm(&#34;2020-02-14T10:30&#34;, &#34;2020-02-14T10:30:30&#34;)
     0
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm(datetime.datetime(2020, 2, 14, 10, 20, 30), datetime.datetime(2020, 2, 14, 10, 22, 30))
+    2
     &#34;&#34;&#34;
     date_a, _ = _parse(a, at_least=&#34;%Y-%m-%dT%H:%M&#34;)
     date_b, _ = _parse(b, at_least=&#34;%Y-%m-%dT%H:%M&#34;)
@@ -746,7 +827,7 @@ if __name__ == &#34;__main__&#34;:
 </details>
 </dd>
 <dt id="yyyy_mm_dd.diff_yyyy_mm_dd_hh_mm_ss"><code class="name flex">
-<span>def <span class="ident">diff_yyyy_mm_dd_hh_mm_ss</span></span>(<span>a: str, b: str) ‑> int</span>
+<span>def <span class="ident">diff_yyyy_mm_dd_hh_mm_ss</span></span>(<span>a: Union[str, datetime.datetime], b: Union[str, datetime.datetime]) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the amount of seconds between datetime A and datetime B</p>
@@ -756,12 +837,14 @@ if __name__ == &#34;__main__&#34;:
 31622400
 &gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm_ss(&quot;2020-02-14T10:20:30&quot;, &quot;2020-02-14T10:20:29&quot;)
 -1
+&gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm_ss(datetime.datetime(2020, 2, 14, 10, 20, 30), datetime.datetime(2020, 2, 14, 10, 20, 32))
+2
 </code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def diff_yyyy_mm_dd_hh_mm_ss(a: str, b: str) -&gt; int:
+<pre><code class="python">def diff_yyyy_mm_dd_hh_mm_ss(a: Union[str, datetime.datetime], b: Union[str, datetime.datetime]) -&gt; int:
     &#34;&#34;&#34;
     Returns the amount of seconds between datetime A and datetime B
 
@@ -771,6 +854,8 @@ if __name__ == &#34;__main__&#34;:
     31622400
     &gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm_ss(&#34;2020-02-14T10:20:30&#34;, &#34;2020-02-14T10:20:29&#34;)
     -1
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm_ss(datetime.datetime(2020, 2, 14, 10, 20, 30), datetime.datetime(2020, 2, 14, 10, 20, 32))
+    2
     &#34;&#34;&#34;
     date_a, _ = _parse(a, at_least=&#34;%Y-%m-%dT%H:%M:%S&#34;)
     date_b, _ = _parse(b, at_least=&#34;%Y-%m-%dT%H:%M:%S&#34;)
@@ -778,7 +863,7 @@ if __name__ == &#34;__main__&#34;:
 </details>
 </dd>
 <dt id="yyyy_mm_dd.end_of_yyyy"><code class="name flex">
-<span>def <span class="ident">end_of_yyyy</span></span>(<span>yyyy_mm_dd: str) ‑> str</span>
+<span>def <span class="ident">end_of_yyyy</span></span>(<span>yyyy_mm_dd: Union[str, datetime.date]) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns last day of the year of a given date</p>
@@ -786,18 +871,22 @@ if __name__ == &#34;__main__&#34;:
 '2020-12-31'
 &gt;&gt;&gt; end_of_yyyy('2020-05-14')
 '2020-12-31'
+&gt;&gt;&gt; end_of_yyyy(datetime.date(2020, 5, 14))
+'2020-12-31'
 </code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def end_of_yyyy(yyyy_mm_dd: str) -&gt; str:
+<pre><code class="python">def end_of_yyyy(yyyy_mm_dd: Union[str, datetime.date]) -&gt; str:
     &#34;&#34;&#34;
     Returns last day of the year of a given date
 
     &gt;&gt;&gt; end_of_yyyy(&#39;2020&#39;)
     &#39;2020-12-31&#39;
     &gt;&gt;&gt; end_of_yyyy(&#39;2020-05-14&#39;)
+    &#39;2020-12-31&#39;
+    &gt;&gt;&gt; end_of_yyyy(datetime.date(2020, 5, 14))
     &#39;2020-12-31&#39;
     &#34;&#34;&#34;
     date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
@@ -806,7 +895,7 @@ if __name__ == &#34;__main__&#34;:
 </details>
 </dd>
 <dt id="yyyy_mm_dd.end_of_yyyy_mm"><code class="name flex">
-<span>def <span class="ident">end_of_yyyy_mm</span></span>(<span>yyyy_mm_dd: str) ‑> str</span>
+<span>def <span class="ident">end_of_yyyy_mm</span></span>(<span>yyyy_mm_dd: Union[str, datetime.date]) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns last day of the month of a given date</p>
@@ -814,12 +903,14 @@ if __name__ == &#34;__main__&#34;:
 '2020-02-29'
 &gt;&gt;&gt; end_of_yyyy_mm('2020-05-14')
 '2020-05-31'
+&gt;&gt;&gt; end_of_yyyy_mm(datetime.date(2020, 5, 14))
+'2020-05-31'
 </code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def end_of_yyyy_mm(yyyy_mm_dd: str) -&gt; str:
+<pre><code class="python">def end_of_yyyy_mm(yyyy_mm_dd: Union[str, datetime.date]) -&gt; str:
     &#34;&#34;&#34;
     Returns last day of the month of a given date
 
@@ -827,13 +918,15 @@ if __name__ == &#34;__main__&#34;:
     &#39;2020-02-29&#39;
     &gt;&gt;&gt; end_of_yyyy_mm(&#39;2020-05-14&#39;)
     &#39;2020-05-31&#39;
+    &gt;&gt;&gt; end_of_yyyy_mm(datetime.date(2020, 5, 14))
+    &#39;2020-05-31&#39;
     &#34;&#34;&#34;
 
     return move_yyyy_mm_dd(start_of_yyyy_mm(move_yyyy_mm(yyyy_mm_dd, 1)), -1)</code></pre>
 </details>
 </dd>
 <dt id="yyyy_mm_dd.end_of_yyyy_mm_dd"><code class="name flex">
-<span>def <span class="ident">end_of_yyyy_mm_dd</span></span>(<span>yyyy_mm_dd: str) ‑> str</span>
+<span>def <span class="ident">end_of_yyyy_mm_dd</span></span>(<span>yyyy_mm_dd: Union[str, datetime.date]) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns last datetime of the day of a given date</p>
@@ -841,12 +934,14 @@ if __name__ == &#34;__main__&#34;:
 '2020-05-14T23:59:59'
 &gt;&gt;&gt; end_of_yyyy_mm_dd('2020-05-14T13:25:10')
 '2020-05-14T23:59:59'
+&gt;&gt;&gt; end_of_yyyy_mm_dd(datetime.date(2020, 5, 14))
+'2020-05-14T23:59:59'
 </code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def end_of_yyyy_mm_dd(yyyy_mm_dd: str) -&gt; str:
+<pre><code class="python">def end_of_yyyy_mm_dd(yyyy_mm_dd: Union[str, datetime.date]) -&gt; str:
     &#34;&#34;&#34;
     Returns last datetime of the day of a given date
 
@@ -854,60 +949,92 @@ if __name__ == &#34;__main__&#34;:
     &#39;2020-05-14T23:59:59&#39;
     &gt;&gt;&gt; end_of_yyyy_mm_dd(&#39;2020-05-14T13:25:10&#39;)
     &#39;2020-05-14T23:59:59&#39;
+    &gt;&gt;&gt; end_of_yyyy_mm_dd(datetime.date(2020, 5, 14))
+    &#39;2020-05-14T23:59:59&#39;
     &#34;&#34;&#34;
     date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
 
     return move_yyyy_mm_dd_hh_mm_ss(start_of_yyyy_mm_dd(move_yyyy_mm_dd(yyyy_mm_dd, 1)), -1)</code></pre>
 </details>
 </dd>
+<dt id="yyyy_mm_dd.from_yyyymmdd"><code class="name flex">
+<span>def <span class="ident">from_yyyymmdd</span></span>(<span>yyyymmdd: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Converts a yyyymmdd date format (no dashes) to yyyy-mm-dd date format (with dashes)</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; from_yyyymmdd('20200514')
+'2020-05-14'
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def from_yyyymmdd(yyyymmdd: str) -&gt; str:
+    &#34;&#34;&#34;
+    Converts a yyyymmdd date format (no dashes) to yyyy-mm-dd date format (with dashes)
+
+    &gt;&gt;&gt; from_yyyymmdd(&#39;20200514&#39;)
+    &#39;2020-05-14&#39;
+    &#34;&#34;&#34;
+    return datetime.datetime.strptime(yyyymmdd, &#34;%Y%m%d&#34;).strftime(&#34;%Y-%m-%d&#34;)</code></pre>
+</details>
+</dd>
 <dt id="yyyy_mm_dd.hh_mm"><code class="name flex">
-<span>def <span class="ident">hh_mm</span></span>(<span>yyyy_mm_dd: str) ‑> str</span>
+<span>def <span class="ident">hh_mm</span></span>(<span>yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime]) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Extracts the hour and minute of a given datetime</p>
 <pre><code class="language-python-repl">&gt;&gt;&gt; hh_mm('2020-05-14T10:20:30')
+'10:20'
+&gt;&gt;&gt; hh_mm(datetime.datetime(2020, 5, 14, 10, 20, 30))
 '10:20'
 </code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def hh_mm(yyyy_mm_dd: str) -&gt; str:
+<pre><code class="python">def hh_mm(yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime]) -&gt; str:
     &#34;&#34;&#34;
     Extracts the hour and minute of a given datetime
 
     &gt;&gt;&gt; hh_mm(&#39;2020-05-14T10:20:30&#39;)
     &#39;10:20&#39;
+    &gt;&gt;&gt; hh_mm(datetime.datetime(2020, 5, 14, 10, 20, 30))
+    &#39;10:20&#39;
     &#34;&#34;&#34;
-    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%dT%H:%M&#34;)
+    date, _ = _parse(yyyy_mm_dd_hh_mm_ss, at_least=&#34;%Y-%m-%dT%H:%M&#34;)
     return date.strftime(&#34;%H:%M&#34;)</code></pre>
 </details>
 </dd>
 <dt id="yyyy_mm_dd.hh_mm_ss"><code class="name flex">
-<span>def <span class="ident">hh_mm_ss</span></span>(<span>yyyy_mm_dd: str) ‑> str</span>
+<span>def <span class="ident">hh_mm_ss</span></span>(<span>yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime]) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Extracts the time of a given datetime</p>
 <pre><code class="language-python-repl">&gt;&gt;&gt; hh_mm_ss('2020-05-14T10:20:30')
+'10:20:30'
+&gt;&gt;&gt; hh_mm_ss(datetime.datetime(2020, 5, 14, 10, 20, 30))
 '10:20:30'
 </code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def hh_mm_ss(yyyy_mm_dd: str) -&gt; str:
+<pre><code class="python">def hh_mm_ss(yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime]) -&gt; str:
     &#34;&#34;&#34;
     Extracts the time of a given datetime
 
     &gt;&gt;&gt; hh_mm_ss(&#39;2020-05-14T10:20:30&#39;)
     &#39;10:20:30&#39;
+    &gt;&gt;&gt; hh_mm_ss(datetime.datetime(2020, 5, 14, 10, 20, 30))
+    &#39;10:20:30&#39;
     &#34;&#34;&#34;
-    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%dT%H:%M:%S&#34;)
+    date, _ = _parse(yyyy_mm_dd_hh_mm_ss, at_least=&#34;%Y-%m-%dT%H:%M:%S&#34;)
     return date.strftime(&#34;%H:%M:%S&#34;)</code></pre>
 </details>
 </dd>
 <dt id="yyyy_mm_dd.hour"><code class="name flex">
-<span>def <span class="ident">hour</span></span>(<span>yyyy_mm_dd: str) ‑> int</span>
+<span>def <span class="ident">hour</span></span>(<span>yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime]) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Extracts the hour of a given datetime</p>
@@ -918,19 +1045,19 @@ if __name__ == &#34;__main__&#34;:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def hour(yyyy_mm_dd: str) -&gt; int:
+<pre><code class="python">def hour(yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime]) -&gt; int:
     &#34;&#34;&#34;
     Extracts the hour of a given datetime
 
     &gt;&gt;&gt; hour(&#39;2020-05-14T05:10:58&#39;)
     5
     &#34;&#34;&#34;
-    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%dT%H&#34;)
+    date, _ = _parse(yyyy_mm_dd_hh_mm_ss, at_least=&#34;%Y-%m-%dT%H&#34;)
     return date.hour</code></pre>
 </details>
 </dd>
 <dt id="yyyy_mm_dd.month"><code class="name flex">
-<span>def <span class="ident">month</span></span>(<span>yyyy_mm_dd: str) ‑> int</span>
+<span>def <span class="ident">month</span></span>(<span>yyyy_mm_dd: Union[str, datetime.date]) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Extracts the month of a given date</p>
@@ -941,7 +1068,7 @@ if __name__ == &#34;__main__&#34;:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def month(yyyy_mm_dd: str) -&gt; int:
+<pre><code class="python">def month(yyyy_mm_dd: Union[str, datetime.date]) -&gt; int:
     &#34;&#34;&#34;
     Extracts the month of a given date
 
@@ -953,7 +1080,7 @@ if __name__ == &#34;__main__&#34;:
 </details>
 </dd>
 <dt id="yyyy_mm_dd.move_yyyy"><code class="name flex">
-<span>def <span class="ident">move_yyyy</span></span>(<span>yyyy_mm_dd: str, by: int) ‑> str</span>
+<span>def <span class="ident">move_yyyy</span></span>(<span>yyyy_mm_dd: Union[str, datetime.date], by: int) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Increases or decreases a date by a certain number of years</p>
@@ -967,12 +1094,16 @@ if __name__ == &#34;__main__&#34;:
 '2021-02-14'
 &gt;&gt;&gt; move_yyyy('2020-02-14T10:20:30', 1)
 '2021-02-14T10:20:30'
+&gt;&gt;&gt; move_yyyy(datetime.date(2020, 2, 14), 1)
+'2021-02-14'
+&gt;&gt;&gt; move_yyyy(datetime.datetime(2020, 2, 14, 0, 0), 1)
+'2021-02-14T00:00:00'
 </code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def move_yyyy(yyyy_mm_dd: str, by: int) -&gt; str:
+<pre><code class="python">def move_yyyy(yyyy_mm_dd: Union[str, datetime.date], by: int) -&gt; str:
     &#34;&#34;&#34;
     Increases or decreases a date by a certain number of years
 
@@ -986,6 +1117,10 @@ if __name__ == &#34;__main__&#34;:
     &#39;2021-02-14&#39;
     &gt;&gt;&gt; move_yyyy(&#39;2020-02-14T10:20:30&#39;, 1)
     &#39;2021-02-14T10:20:30&#39;
+    &gt;&gt;&gt; move_yyyy(datetime.date(2020, 2, 14), 1)
+    &#39;2021-02-14&#39;
+    &gt;&gt;&gt; move_yyyy(datetime.datetime(2020, 2, 14, 0, 0), 1)
+    &#39;2021-02-14T00:00:00&#39;
     &#34;&#34;&#34;
     date, pattern = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
     date += relativedelta(years=by)
@@ -993,7 +1128,7 @@ if __name__ == &#34;__main__&#34;:
 </details>
 </dd>
 <dt id="yyyy_mm_dd.move_yyyy_mm"><code class="name flex">
-<span>def <span class="ident">move_yyyy_mm</span></span>(<span>yyyy_mm_dd: str, by: int) ‑> str</span>
+<span>def <span class="ident">move_yyyy_mm</span></span>(<span>yyyy_mm_dd: Union[str, datetime.date], by: int) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Increases or decreases a date by a certain number of months</p>
@@ -1005,12 +1140,16 @@ if __name__ == &#34;__main__&#34;:
 '2021-01-14'
 &gt;&gt;&gt; move_yyyy_mm('2020-02-14T10:20:30', 1)
 '2020-03-14T10:20:30'
+&gt;&gt;&gt; move_yyyy_mm(datetime.date(2020, 2, 14), 1)
+'2020-03-14'
+&gt;&gt;&gt; move_yyyy_mm(datetime.datetime(2020, 2, 14, 0, 0), 1)
+'2020-03-14T00:00:00'
 </code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def move_yyyy_mm(yyyy_mm_dd: str, by: int) -&gt; str:
+<pre><code class="python">def move_yyyy_mm(yyyy_mm_dd: Union[str, datetime.date], by: int) -&gt; str:
     &#34;&#34;&#34;
     Increases or decreases a date by a certain number of months
 
@@ -1022,6 +1161,10 @@ if __name__ == &#34;__main__&#34;:
     &#39;2021-01-14&#39;
     &gt;&gt;&gt; move_yyyy_mm(&#39;2020-02-14T10:20:30&#39;, 1)
     &#39;2020-03-14T10:20:30&#39;
+    &gt;&gt;&gt; move_yyyy_mm(datetime.date(2020, 2, 14), 1)
+    &#39;2020-03-14&#39;
+    &gt;&gt;&gt; move_yyyy_mm(datetime.datetime(2020, 2, 14, 0, 0), 1)
+    &#39;2020-03-14T00:00:00&#39;
     &#34;&#34;&#34;
     date, pattern = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m&#34;)
     date += relativedelta(months=by)
@@ -1029,7 +1172,7 @@ if __name__ == &#34;__main__&#34;:
 </details>
 </dd>
 <dt id="yyyy_mm_dd.move_yyyy_mm_dd"><code class="name flex">
-<span>def <span class="ident">move_yyyy_mm_dd</span></span>(<span>yyyy_mm_dd: str, by: int) ‑> str</span>
+<span>def <span class="ident">move_yyyy_mm_dd</span></span>(<span>yyyy_mm_dd: Union[str, datetime.date], by: int) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Increases or decreases a date by a certain number of days</p>
@@ -1039,12 +1182,16 @@ if __name__ == &#34;__main__&#34;:
 '2020-12-30'
 &gt;&gt;&gt; move_yyyy_mm_dd('2020-02-29T10:20:30', 1)
 '2020-03-01T10:20:30'
+&gt;&gt;&gt; move_yyyy_mm_dd(datetime.date(2020, 2, 29), 1)
+'2020-03-01'
+&gt;&gt;&gt; move_yyyy_mm_dd(datetime.datetime(2020, 2, 29, 0, 0), 1)
+'2020-03-01T00:00:00'
 </code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def move_yyyy_mm_dd(yyyy_mm_dd: str, by: int) -&gt; str:
+<pre><code class="python">def move_yyyy_mm_dd(yyyy_mm_dd: Union[str, datetime.date], by: int) -&gt; str:
     &#34;&#34;&#34;
     Increases or decreases a date by a certain number of days
 
@@ -1054,6 +1201,10 @@ if __name__ == &#34;__main__&#34;:
     &#39;2020-12-30&#39;
     &gt;&gt;&gt; move_yyyy_mm_dd(&#39;2020-02-29T10:20:30&#39;, 1)
     &#39;2020-03-01T10:20:30&#39;
+    &gt;&gt;&gt; move_yyyy_mm_dd(datetime.date(2020, 2, 29), 1)
+    &#39;2020-03-01&#39;
+    &gt;&gt;&gt; move_yyyy_mm_dd(datetime.datetime(2020, 2, 29, 0, 0), 1)
+    &#39;2020-03-01T00:00:00&#39;
     &#34;&#34;&#34;
     date, pattern = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%d&#34;)
     date += relativedelta(days=by)
@@ -1061,7 +1212,7 @@ if __name__ == &#34;__main__&#34;:
 </details>
 </dd>
 <dt id="yyyy_mm_dd.move_yyyy_mm_dd_hh"><code class="name flex">
-<span>def <span class="ident">move_yyyy_mm_dd_hh</span></span>(<span>yyyy_mm_dd_hh_mm_ss: str, by: int) ‑> str</span>
+<span>def <span class="ident">move_yyyy_mm_dd_hh</span></span>(<span>yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime], by: int) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Increases or decreases a datetime by a certain number of hours</p>
@@ -1071,12 +1222,14 @@ if __name__ == &#34;__main__&#34;:
 '2020-12-31T22'
 &gt;&gt;&gt; move_yyyy_mm_dd_hh('2020-02-29T10:20:30', 1)
 '2020-02-29T11:20:30'
+&gt;&gt;&gt; move_yyyy_mm_dd_hh(datetime.datetime(2020, 2, 29, 10, 20, 30), 1)
+'2020-02-29T11:20:30'
 </code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def move_yyyy_mm_dd_hh(yyyy_mm_dd_hh_mm_ss: str, by: int) -&gt; str:
+<pre><code class="python">def move_yyyy_mm_dd_hh(yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime], by: int) -&gt; str:
     &#34;&#34;&#34;
     Increases or decreases a datetime by a certain number of hours
 
@@ -1086,6 +1239,8 @@ if __name__ == &#34;__main__&#34;:
     &#39;2020-12-31T22&#39;
     &gt;&gt;&gt; move_yyyy_mm_dd_hh(&#39;2020-02-29T10:20:30&#39;, 1)
     &#39;2020-02-29T11:20:30&#39;
+    &gt;&gt;&gt; move_yyyy_mm_dd_hh(datetime.datetime(2020, 2, 29, 10, 20, 30), 1)
+    &#39;2020-02-29T11:20:30&#39;
     &#34;&#34;&#34;
     date, pattern = _parse(yyyy_mm_dd_hh_mm_ss, at_least=&#34;%Y-%m-%dT%H&#34;)
     date += relativedelta(hours=by)
@@ -1093,7 +1248,7 @@ if __name__ == &#34;__main__&#34;:
 </details>
 </dd>
 <dt id="yyyy_mm_dd.move_yyyy_mm_dd_hh_mm"><code class="name flex">
-<span>def <span class="ident">move_yyyy_mm_dd_hh_mm</span></span>(<span>yyyy_mm_dd_hh_mm_ss: str, by: int) ‑> str</span>
+<span>def <span class="ident">move_yyyy_mm_dd_hh_mm</span></span>(<span>yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime], by: int) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Increases or decreases a datetime by a certain number of minutes</p>
@@ -1103,12 +1258,14 @@ if __name__ == &#34;__main__&#34;:
 '2020-12-31T23:58'
 &gt;&gt;&gt; move_yyyy_mm_dd_hh_mm('2020-02-29T10:20:30', 1)
 '2020-02-29T10:21:30'
+&gt;&gt;&gt; move_yyyy_mm_dd_hh_mm(datetime.datetime(2020, 2, 29, 10, 20, 30), 1)
+'2020-02-29T10:21:30'
 </code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def move_yyyy_mm_dd_hh_mm(yyyy_mm_dd_hh_mm_ss: str, by: int) -&gt; str:
+<pre><code class="python">def move_yyyy_mm_dd_hh_mm(yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime], by: int) -&gt; str:
     &#34;&#34;&#34;
     Increases or decreases a datetime by a certain number of minutes
 
@@ -1118,6 +1275,8 @@ if __name__ == &#34;__main__&#34;:
     &#39;2020-12-31T23:58&#39;
     &gt;&gt;&gt; move_yyyy_mm_dd_hh_mm(&#39;2020-02-29T10:20:30&#39;, 1)
     &#39;2020-02-29T10:21:30&#39;
+    &gt;&gt;&gt; move_yyyy_mm_dd_hh_mm(datetime.datetime(2020, 2, 29, 10, 20, 30), 1)
+    &#39;2020-02-29T10:21:30&#39;
     &#34;&#34;&#34;
     date, pattern = _parse(yyyy_mm_dd_hh_mm_ss, at_least=&#34;%Y-%m-%dT%H:%M&#34;)
     date += relativedelta(minutes=by)
@@ -1125,7 +1284,7 @@ if __name__ == &#34;__main__&#34;:
 </details>
 </dd>
 <dt id="yyyy_mm_dd.move_yyyy_mm_dd_hh_mm_ss"><code class="name flex">
-<span>def <span class="ident">move_yyyy_mm_dd_hh_mm_ss</span></span>(<span>yyyy_mm_dd_hh_mm_ss: str, by: int) ‑> str</span>
+<span>def <span class="ident">move_yyyy_mm_dd_hh_mm_ss</span></span>(<span>yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime], by: int) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Increases or decreases a datetime by a certain number of seconds</p>
@@ -1133,12 +1292,14 @@ if __name__ == &#34;__main__&#34;:
 '2021-01-01T00:00:00'
 &gt;&gt;&gt; move_yyyy_mm_dd_hh_mm_ss('2020-12-31T23:59:59', -1)
 '2020-12-31T23:59:58'
+&gt;&gt;&gt; move_yyyy_mm_dd_hh_mm_ss(datetime.datetime(2020, 2, 29, 10, 20, 30), 1)
+'2020-02-29T10:20:31'
 </code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def move_yyyy_mm_dd_hh_mm_ss(yyyy_mm_dd_hh_mm_ss: str, by: int) -&gt; str:
+<pre><code class="python">def move_yyyy_mm_dd_hh_mm_ss(yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime], by: int) -&gt; str:
     &#34;&#34;&#34;
     Increases or decreases a datetime by a certain number of seconds
 
@@ -1146,6 +1307,8 @@ if __name__ == &#34;__main__&#34;:
     &#39;2021-01-01T00:00:00&#39;
     &gt;&gt;&gt; move_yyyy_mm_dd_hh_mm_ss(&#39;2020-12-31T23:59:59&#39;, -1)
     &#39;2020-12-31T23:59:58&#39;
+    &gt;&gt;&gt; move_yyyy_mm_dd_hh_mm_ss(datetime.datetime(2020, 2, 29, 10, 20, 30), 1)
+    &#39;2020-02-29T10:20:31&#39;
     &#34;&#34;&#34;
     date, pattern = _parse(yyyy_mm_dd_hh_mm_ss, at_least=&#34;%Y-%m-%dT%H:%M:%S&#34;)
     date += relativedelta(seconds=by)
@@ -1175,7 +1338,7 @@ True
 </details>
 </dd>
 <dt id="yyyy_mm_dd.start_of_yyyy"><code class="name flex">
-<span>def <span class="ident">start_of_yyyy</span></span>(<span>yyyy_mm_dd: str) ‑> str</span>
+<span>def <span class="ident">start_of_yyyy</span></span>(<span>yyyy_mm_dd: Union[str, datetime.date]) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns first day of the year of a given date</p>
@@ -1183,18 +1346,22 @@ True
 '2020-01-01'
 &gt;&gt;&gt; start_of_yyyy('2020-05-14')
 '2020-01-01'
+&gt;&gt;&gt; start_of_yyyy(datetime.date(2020, 5, 14))
+'2020-01-01'
 </code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def start_of_yyyy(yyyy_mm_dd: str) -&gt; str:
+<pre><code class="python">def start_of_yyyy(yyyy_mm_dd: Union[str, datetime.date]) -&gt; str:
     &#34;&#34;&#34;
     Returns first day of the year of a given date
 
     &gt;&gt;&gt; start_of_yyyy(&#39;2020&#39;)
     &#39;2020-01-01&#39;
     &gt;&gt;&gt; start_of_yyyy(&#39;2020-05-14&#39;)
+    &#39;2020-01-01&#39;
+    &gt;&gt;&gt; start_of_yyyy(datetime.date(2020, 5, 14))
     &#39;2020-01-01&#39;
     &#34;&#34;&#34;
     date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
@@ -1203,7 +1370,7 @@ True
 </details>
 </dd>
 <dt id="yyyy_mm_dd.start_of_yyyy_mm"><code class="name flex">
-<span>def <span class="ident">start_of_yyyy_mm</span></span>(<span>yyyy_mm_dd: str) ‑> str</span>
+<span>def <span class="ident">start_of_yyyy_mm</span></span>(<span>yyyy_mm_dd: Union[str, datetime.date]) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns first day of the month of a given date</p>
@@ -1211,18 +1378,22 @@ True
 '2020-05-01'
 &gt;&gt;&gt; start_of_yyyy_mm('2020-05-14')
 '2020-05-01'
+&gt;&gt;&gt; start_of_yyyy_mm(datetime.date(2020, 5, 14))
+'2020-05-01'
 </code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def start_of_yyyy_mm(yyyy_mm_dd: str) -&gt; str:
+<pre><code class="python">def start_of_yyyy_mm(yyyy_mm_dd: Union[str, datetime.date]) -&gt; str:
     &#34;&#34;&#34;
     Returns first day of the month of a given date
 
     &gt;&gt;&gt; start_of_yyyy_mm(&#39;2020-05&#39;)
     &#39;2020-05-01&#39;
     &gt;&gt;&gt; start_of_yyyy_mm(&#39;2020-05-14&#39;)
+    &#39;2020-05-01&#39;
+    &gt;&gt;&gt; start_of_yyyy_mm(datetime.date(2020, 5, 14))
     &#39;2020-05-01&#39;
     &#34;&#34;&#34;
     date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m&#34;)
@@ -1231,7 +1402,7 @@ True
 </details>
 </dd>
 <dt id="yyyy_mm_dd.start_of_yyyy_mm_dd"><code class="name flex">
-<span>def <span class="ident">start_of_yyyy_mm_dd</span></span>(<span>yyyy_mm_dd: str) ‑> str</span>
+<span>def <span class="ident">start_of_yyyy_mm_dd</span></span>(<span>yyyy_mm_dd: Union[str, datetime.date]) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns first datetime of the day of a given date</p>
@@ -1239,18 +1410,22 @@ True
 '2020-05-14T00:00:00'
 &gt;&gt;&gt; start_of_yyyy_mm_dd('2020-05-14T13:25:10')
 '2020-05-14T00:00:00'
+&gt;&gt;&gt; start_of_yyyy_mm_dd(datetime.date(2020, 5, 14))
+'2020-05-14T00:00:00'
 </code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def start_of_yyyy_mm_dd(yyyy_mm_dd: str) -&gt; str:
+<pre><code class="python">def start_of_yyyy_mm_dd(yyyy_mm_dd: Union[str, datetime.date]) -&gt; str:
     &#34;&#34;&#34;
     Returns first datetime of the day of a given date
 
     &gt;&gt;&gt; start_of_yyyy_mm_dd(&#39;2020-05-14&#39;)
     &#39;2020-05-14T00:00:00&#39;
     &gt;&gt;&gt; start_of_yyyy_mm_dd(&#39;2020-05-14T13:25:10&#39;)
+    &#39;2020-05-14T00:00:00&#39;
+    &gt;&gt;&gt; start_of_yyyy_mm_dd(datetime.date(2020, 5, 14))
     &#39;2020-05-14T00:00:00&#39;
     &#34;&#34;&#34;
     date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%d&#34;)
@@ -1259,7 +1434,7 @@ True
 </details>
 </dd>
 <dt id="yyyy_mm_dd.to_datetime"><code class="name flex">
-<span>def <span class="ident">to_datetime</span></span>(<span>yyyy_mm_dd: str) ‑> datetime.datetime</span>
+<span>def <span class="ident">to_datetime</span></span>(<span>yyyy_mm_dd: Union[str, datetime.date]) ‑> datetime.datetime</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Converts any partial or full yyyy-mm-ddThh:mm:ss to python datetime</p>
@@ -1274,7 +1449,7 @@ datetime.datetime(2020, 5, 14, 10, 20, 30)
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def to_datetime(yyyy_mm_dd: str) -&gt; datetime.datetime:
+<pre><code class="python">def to_datetime(yyyy_mm_dd: Union[str, datetime.date]) -&gt; datetime.datetime:
     &#34;&#34;&#34;
     Converts any partial or full yyyy-mm-ddThh:mm:ss to python datetime
 
@@ -1287,6 +1462,33 @@ datetime.datetime(2020, 5, 14, 10, 20, 30)
     &#34;&#34;&#34;
     date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
     return date</code></pre>
+</details>
+</dd>
+<dt id="yyyy_mm_dd.to_yyyymmdd"><code class="name flex">
+<span>def <span class="ident">to_yyyymmdd</span></span>(<span>yyyy_mm_dd: Union[str, datetime.date]) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Converts any partial or full yyyy-mm-ddThh:mm:ss to yyyymmdd date format (no dashes)</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; to_yyyymmdd('2020-05-14')
+'20200514'
+&gt;&gt;&gt; to_yyyymmdd(datetime.date(2020, 5, 14))
+'20200514'
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_yyyymmdd(yyyy_mm_dd: Union[str, datetime.date]) -&gt; str:
+    &#34;&#34;&#34;
+    Converts any partial or full yyyy-mm-ddThh:mm:ss to yyyymmdd date format (no dashes)
+
+    &gt;&gt;&gt; to_yyyymmdd(&#39;2020-05-14&#39;)
+    &#39;20200514&#39;
+    &gt;&gt;&gt; to_yyyymmdd(datetime.date(2020, 5, 14))
+    &#39;20200514&#39;
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
+    return date.strftime(&#34;%Y%m%d&#34;)</code></pre>
 </details>
 </dd>
 <dt id="yyyy_mm_dd.today"><code class="name flex">
@@ -1334,7 +1536,7 @@ True
 </details>
 </dd>
 <dt id="yyyy_mm_dd.year"><code class="name flex">
-<span>def <span class="ident">year</span></span>(<span>yyyy_mm_dd: str) ‑> int</span>
+<span>def <span class="ident">year</span></span>(<span>yyyy_mm_dd: Union[str, datetime.date]) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Extracts the year of a given date, similar to yyyy function but returns an int</p>
@@ -1345,7 +1547,7 @@ True
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def year(yyyy_mm_dd: str) -&gt; int:
+<pre><code class="python">def year(yyyy_mm_dd: Union[str, datetime.date]) -&gt; int:
     &#34;&#34;&#34;
     Extracts the year of a given date, similar to yyyy function but returns an int
 
@@ -1379,22 +1581,26 @@ True
 </details>
 </dd>
 <dt id="yyyy_mm_dd.yyyy"><code class="name flex">
-<span>def <span class="ident">yyyy</span></span>(<span>yyyy_mm_dd: str) ‑> str</span>
+<span>def <span class="ident">yyyy</span></span>(<span>yyyy_mm_dd: Union[str, datetime.date]) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Extracts the year of a given date</p>
 <pre><code class="language-python-repl">&gt;&gt;&gt; yyyy('2020-05-14')
+'2020'
+&gt;&gt;&gt; yyyy(datetime.date(2020, 5, 14))
 '2020'
 </code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def yyyy(yyyy_mm_dd: str) -&gt; str:
+<pre><code class="python">def yyyy(yyyy_mm_dd: Union[str, datetime.date]) -&gt; str:
     &#34;&#34;&#34;
     Extracts the year of a given date
 
     &gt;&gt;&gt; yyyy(&#39;2020-05-14&#39;)
+    &#39;2020&#39;
+    &gt;&gt;&gt; yyyy(datetime.date(2020, 5, 14))
     &#39;2020&#39;
     &#34;&#34;&#34;
     date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
@@ -1402,22 +1608,26 @@ True
 </details>
 </dd>
 <dt id="yyyy_mm_dd.yyyy_mm"><code class="name flex">
-<span>def <span class="ident">yyyy_mm</span></span>(<span>yyyy_mm_dd: str) ‑> str</span>
+<span>def <span class="ident">yyyy_mm</span></span>(<span>yyyy_mm_dd: Union[str, datetime.date]) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Extracts the year and month of a given date</p>
 <pre><code class="language-python-repl">&gt;&gt;&gt; yyyy_mm('2020-05-14')
+'2020-05'
+&gt;&gt;&gt; yyyy_mm(datetime.date(2020, 5, 14))
 '2020-05'
 </code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def yyyy_mm(yyyy_mm_dd: str) -&gt; str:
+<pre><code class="python">def yyyy_mm(yyyy_mm_dd: Union[str, datetime.date]) -&gt; str:
     &#34;&#34;&#34;
     Extracts the year and month of a given date
 
     &gt;&gt;&gt; yyyy_mm(&#39;2020-05-14&#39;)
+    &#39;2020-05&#39;
+    &gt;&gt;&gt; yyyy_mm(datetime.date(2020, 5, 14))
     &#39;2020-05&#39;
     &#34;&#34;&#34;
     date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m&#34;)
@@ -1425,70 +1635,30 @@ True
 </details>
 </dd>
 <dt id="yyyy_mm_dd.yyyy_mm_dd"><code class="name flex">
-<span>def <span class="ident">yyyy_mm_dd</span></span>(<span>yyyy_mm_dd: str) ‑> str</span>
+<span>def <span class="ident">yyyy_mm_dd</span></span>(<span>yyyy_mm_dd: Union[str, datetime.date]) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Extracts the date of a given datetime</p>
 <pre><code class="language-python-repl">&gt;&gt;&gt; yyyy_mm_dd('2020-05-14T10:20:30')
 '2020-05-14'
-</code></pre></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def yyyy_mm_dd(yyyy_mm_dd: str) -&gt; str:
-    &#34;&#34;&#34;
-    Extracts the date of a given datetime
-
-    &gt;&gt;&gt; yyyy_mm_dd(&#39;2020-05-14T10:20:30&#39;)
-    &#39;2020-05-14&#39;
-    &#34;&#34;&#34;
-    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%d&#34;)
-    return date.strftime(&#34;%Y-%m-%d&#34;)</code></pre>
-</details>
-</dd>
-<dt id="yyyy_mm_dd.yyyy_mm_dd_to_yyyymmdd"><code class="name flex">
-<span>def <span class="ident">yyyy_mm_dd_to_yyyymmdd</span></span>(<span>yyyy_mm_dd: str) ‑> str</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Converts a yyyymmdd date format to yyyy-mm-dd date format</p>
-<pre><code class="language-python-repl">&gt;&gt;&gt; yyyy_mm_dd_to_yyyymmdd('2020-05-14')
-'20200514'
-</code></pre></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def yyyy_mm_dd_to_yyyymmdd(yyyy_mm_dd: str) -&gt; str:
-    &#34;&#34;&#34;
-    Converts a yyyymmdd date format to yyyy-mm-dd date format
-
-    &gt;&gt;&gt; yyyy_mm_dd_to_yyyymmdd(&#39;2020-05-14&#39;)
-    &#39;20200514&#39;
-    &#34;&#34;&#34;
-    return datetime.datetime.strptime(yyyy_mm_dd, &#34;%Y-%m-%d&#34;).strftime(&#34;%Y%m%d&#34;)</code></pre>
-</details>
-</dd>
-<dt id="yyyy_mm_dd.yyyymmdd_to_yyyy_mm_dd"><code class="name flex">
-<span>def <span class="ident">yyyymmdd_to_yyyy_mm_dd</span></span>(<span>yyyymmdd: str) ‑> str</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Converts a yyyymmdd date format to yyyy-mm-dd date format</p>
-<pre><code class="language-python-repl">&gt;&gt;&gt; yyyymmdd_to_yyyy_mm_dd('20200514')
+&gt;&gt;&gt; yyyy_mm_dd(datetime.date(2020, 5, 14))
 '2020-05-14'
 </code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def yyyymmdd_to_yyyy_mm_dd(yyyymmdd: str) -&gt; str:
+<pre><code class="python">def yyyy_mm_dd(yyyy_mm_dd: Union[str, datetime.date]) -&gt; str:
     &#34;&#34;&#34;
-    Converts a yyyymmdd date format to yyyy-mm-dd date format
+    Extracts the date of a given datetime
 
-    &gt;&gt;&gt; yyyymmdd_to_yyyy_mm_dd(&#39;20200514&#39;)
+    &gt;&gt;&gt; yyyy_mm_dd(&#39;2020-05-14T10:20:30&#39;)
+    &#39;2020-05-14&#39;
+    &gt;&gt;&gt; yyyy_mm_dd(datetime.date(2020, 5, 14))
     &#39;2020-05-14&#39;
     &#34;&#34;&#34;
-    return datetime.datetime.strptime(yyyymmdd, &#34;%Y%m%d&#34;).strftime(&#34;%Y-%m-%d&#34;)</code></pre>
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%d&#34;)
+    return date.strftime(&#34;%Y-%m-%d&#34;)</code></pre>
 </details>
 </dd>
 </dl>
@@ -1514,6 +1684,7 @@ True
 <li><code><a title="yyyy_mm_dd.end_of_yyyy" href="#yyyy_mm_dd.end_of_yyyy">end_of_yyyy</a></code></li>
 <li><code><a title="yyyy_mm_dd.end_of_yyyy_mm" href="#yyyy_mm_dd.end_of_yyyy_mm">end_of_yyyy_mm</a></code></li>
 <li><code><a title="yyyy_mm_dd.end_of_yyyy_mm_dd" href="#yyyy_mm_dd.end_of_yyyy_mm_dd">end_of_yyyy_mm_dd</a></code></li>
+<li><code><a title="yyyy_mm_dd.from_yyyymmdd" href="#yyyy_mm_dd.from_yyyymmdd">from_yyyymmdd</a></code></li>
 <li><code><a title="yyyy_mm_dd.hh_mm" href="#yyyy_mm_dd.hh_mm">hh_mm</a></code></li>
 <li><code><a title="yyyy_mm_dd.hh_mm_ss" href="#yyyy_mm_dd.hh_mm_ss">hh_mm_ss</a></code></li>
 <li><code><a title="yyyy_mm_dd.hour" href="#yyyy_mm_dd.hour">hour</a></code></li>
@@ -1529,6 +1700,7 @@ True
 <li><code><a title="yyyy_mm_dd.start_of_yyyy_mm" href="#yyyy_mm_dd.start_of_yyyy_mm">start_of_yyyy_mm</a></code></li>
 <li><code><a title="yyyy_mm_dd.start_of_yyyy_mm_dd" href="#yyyy_mm_dd.start_of_yyyy_mm_dd">start_of_yyyy_mm_dd</a></code></li>
 <li><code><a title="yyyy_mm_dd.to_datetime" href="#yyyy_mm_dd.to_datetime">to_datetime</a></code></li>
+<li><code><a title="yyyy_mm_dd.to_yyyymmdd" href="#yyyy_mm_dd.to_yyyymmdd">to_yyyymmdd</a></code></li>
 <li><code><a title="yyyy_mm_dd.today" href="#yyyy_mm_dd.today">today</a></code></li>
 <li><code><a title="yyyy_mm_dd.tomorrow" href="#yyyy_mm_dd.tomorrow">tomorrow</a></code></li>
 <li><code><a title="yyyy_mm_dd.year" href="#yyyy_mm_dd.year">year</a></code></li>
@@ -1536,8 +1708,6 @@ True
 <li><code><a title="yyyy_mm_dd.yyyy" href="#yyyy_mm_dd.yyyy">yyyy</a></code></li>
 <li><code><a title="yyyy_mm_dd.yyyy_mm" href="#yyyy_mm_dd.yyyy_mm">yyyy_mm</a></code></li>
 <li><code><a title="yyyy_mm_dd.yyyy_mm_dd" href="#yyyy_mm_dd.yyyy_mm_dd">yyyy_mm_dd</a></code></li>
-<li><code><a title="yyyy_mm_dd.yyyy_mm_dd_to_yyyymmdd" href="#yyyy_mm_dd.yyyy_mm_dd_to_yyyymmdd">yyyy_mm_dd_to_yyyymmdd</a></code></li>
-<li><code><a title="yyyy_mm_dd.yyyymmdd_to_yyyy_mm_dd" href="#yyyy_mm_dd.yyyymmdd_to_yyyy_mm_dd">yyyymmdd_to_yyyy_mm_dd</a></code></li>
 </ul>
 </li>
 </ul>

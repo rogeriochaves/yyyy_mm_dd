@@ -2,7 +2,7 @@ import datetime
 from dateutil.relativedelta import relativedelta
 import re
 import math
-from typing import Tuple
+from typing import Tuple, Union
 
 
 def today() -> str:
@@ -45,7 +45,7 @@ def now() -> str:
     return datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
 
 
-def move_yyyy(yyyy_mm_dd: str, by: int) -> str:
+def move_yyyy(yyyy_mm_dd: Union[str, datetime.date], by: int) -> str:
     """
     Increases or decreases a date by a certain number of years
 
@@ -59,13 +59,17 @@ def move_yyyy(yyyy_mm_dd: str, by: int) -> str:
     '2021-02-14'
     >>> move_yyyy('2020-02-14T10:20:30', 1)
     '2021-02-14T10:20:30'
+    >>> move_yyyy(datetime.date(2020, 2, 14), 1)
+    '2021-02-14'
+    >>> move_yyyy(datetime.datetime(2020, 2, 14, 0, 0), 1)
+    '2021-02-14T00:00:00'
     """
     date, pattern = _parse(yyyy_mm_dd, at_least="%Y")
     date += relativedelta(years=by)
     return date.strftime(pattern)
 
 
-def move_yyyy_mm(yyyy_mm_dd: str, by: int) -> str:
+def move_yyyy_mm(yyyy_mm_dd: Union[str, datetime.date], by: int) -> str:
     """
     Increases or decreases a date by a certain number of months
 
@@ -77,13 +81,17 @@ def move_yyyy_mm(yyyy_mm_dd: str, by: int) -> str:
     '2021-01-14'
     >>> move_yyyy_mm('2020-02-14T10:20:30', 1)
     '2020-03-14T10:20:30'
+    >>> move_yyyy_mm(datetime.date(2020, 2, 14), 1)
+    '2020-03-14'
+    >>> move_yyyy_mm(datetime.datetime(2020, 2, 14, 0, 0), 1)
+    '2020-03-14T00:00:00'
     """
     date, pattern = _parse(yyyy_mm_dd, at_least="%Y-%m")
     date += relativedelta(months=by)
     return date.strftime(pattern)
 
 
-def move_yyyy_mm_dd(yyyy_mm_dd: str, by: int) -> str:
+def move_yyyy_mm_dd(yyyy_mm_dd: Union[str, datetime.date], by: int) -> str:
     """
     Increases or decreases a date by a certain number of days
 
@@ -93,13 +101,17 @@ def move_yyyy_mm_dd(yyyy_mm_dd: str, by: int) -> str:
     '2020-12-30'
     >>> move_yyyy_mm_dd('2020-02-29T10:20:30', 1)
     '2020-03-01T10:20:30'
+    >>> move_yyyy_mm_dd(datetime.date(2020, 2, 29), 1)
+    '2020-03-01'
+    >>> move_yyyy_mm_dd(datetime.datetime(2020, 2, 29, 0, 0), 1)
+    '2020-03-01T00:00:00'
     """
     date, pattern = _parse(yyyy_mm_dd, at_least="%Y-%m-%d")
     date += relativedelta(days=by)
     return date.strftime(pattern)
 
 
-def move_yyyy_mm_dd_hh(yyyy_mm_dd_hh_mm_ss: str, by: int) -> str:
+def move_yyyy_mm_dd_hh(yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime], by: int) -> str:
     """
     Increases or decreases a datetime by a certain number of hours
 
@@ -109,13 +121,15 @@ def move_yyyy_mm_dd_hh(yyyy_mm_dd_hh_mm_ss: str, by: int) -> str:
     '2020-12-31T22'
     >>> move_yyyy_mm_dd_hh('2020-02-29T10:20:30', 1)
     '2020-02-29T11:20:30'
+    >>> move_yyyy_mm_dd_hh(datetime.datetime(2020, 2, 29, 10, 20, 30), 1)
+    '2020-02-29T11:20:30'
     """
     date, pattern = _parse(yyyy_mm_dd_hh_mm_ss, at_least="%Y-%m-%dT%H")
     date += relativedelta(hours=by)
     return date.strftime(pattern)
 
 
-def move_yyyy_mm_dd_hh_mm(yyyy_mm_dd_hh_mm_ss: str, by: int) -> str:
+def move_yyyy_mm_dd_hh_mm(yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime], by: int) -> str:
     """
     Increases or decreases a datetime by a certain number of minutes
 
@@ -125,13 +139,15 @@ def move_yyyy_mm_dd_hh_mm(yyyy_mm_dd_hh_mm_ss: str, by: int) -> str:
     '2020-12-31T23:58'
     >>> move_yyyy_mm_dd_hh_mm('2020-02-29T10:20:30', 1)
     '2020-02-29T10:21:30'
+    >>> move_yyyy_mm_dd_hh_mm(datetime.datetime(2020, 2, 29, 10, 20, 30), 1)
+    '2020-02-29T10:21:30'
     """
     date, pattern = _parse(yyyy_mm_dd_hh_mm_ss, at_least="%Y-%m-%dT%H:%M")
     date += relativedelta(minutes=by)
     return date.strftime(pattern)
 
 
-def move_yyyy_mm_dd_hh_mm_ss(yyyy_mm_dd_hh_mm_ss: str, by: int) -> str:
+def move_yyyy_mm_dd_hh_mm_ss(yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime], by: int) -> str:
     """
     Increases or decreases a datetime by a certain number of seconds
 
@@ -139,31 +155,35 @@ def move_yyyy_mm_dd_hh_mm_ss(yyyy_mm_dd_hh_mm_ss: str, by: int) -> str:
     '2021-01-01T00:00:00'
     >>> move_yyyy_mm_dd_hh_mm_ss('2020-12-31T23:59:59', -1)
     '2020-12-31T23:59:58'
+    >>> move_yyyy_mm_dd_hh_mm_ss(datetime.datetime(2020, 2, 29, 10, 20, 30), 1)
+    '2020-02-29T10:20:31'
     """
     date, pattern = _parse(yyyy_mm_dd_hh_mm_ss, at_least="%Y-%m-%dT%H:%M:%S")
     date += relativedelta(seconds=by)
     return date.strftime(pattern)
 
 
-def diff_yyyy(a: str, b: str) -> int:
+def diff_yyyy(a: Union[str, datetime.date], b: Union[str, datetime.date]) -> int:
     """
     Returns the amount of years between date A and date B
 
-    >>> diff_yyyy("2020", "2020")
-    0
+    >>> diff_yyyy("2020", "2021")
+    1
     >>> diff_yyyy("2020-02", "2020-08")
     0
     >>> diff_yyyy("2020-02-14T10:20:30", "2021-02-14T10:20:30")
     1
     >>> diff_yyyy("2021-02-14T10:20:30", "2020-02-14T10:20:30")
     -1
+    >>> diff_yyyy(datetime.date(2020, 2, 14), datetime.date(2022, 2, 14))
+    2
     """
     date_a, _ = _parse(a, at_least="%Y")
     date_b, _ = _parse(b, at_least="%Y")
     return relativedelta(date_b, date_a).years
 
 
-def diff_yyyy_mm(a: str, b: str) -> int:
+def diff_yyyy_mm(a: Union[str, datetime.date], b: Union[str, datetime.date]) -> int:
     """
     Returns the amount of months between date A and date B
 
@@ -173,13 +193,15 @@ def diff_yyyy_mm(a: str, b: str) -> int:
     12
     >>> diff_yyyy_mm("2020-02-14T10:20:30", "2020-01-14T10:20:30")
     -1
+    >>> diff_yyyy_mm(datetime.date(2020, 2, 14), datetime.date(2020, 4, 14))
+    2
     """
     date_a, _ = _parse(a, at_least="%Y-%m")
     date_b, _ = _parse(b, at_least="%Y-%m")
     return relativedelta(date_b, date_a).years * 12 + relativedelta(date_b, date_a).months
 
 
-def diff_yyyy_mm_dd(a: str, b: str) -> int:
+def diff_yyyy_mm_dd(a: Union[str, datetime.date], b: Union[str, datetime.date]) -> int:
     """
     Returns the amount of days between date A and date B
 
@@ -191,13 +213,15 @@ def diff_yyyy_mm_dd(a: str, b: str) -> int:
     -1
     >>> diff_yyyy_mm_dd("2020-02-14T10", "2020-02-15T09")
     0
+    >>> diff_yyyy_mm_dd(datetime.date(2020, 2, 14), datetime.date(2020, 2, 16))
+    2
     """
     date_a, _ = _parse(a, at_least="%Y-%m-%d")
     date_b, _ = _parse(b, at_least="%Y-%m-%d")
     return (date_b - date_a).days
 
 
-def diff_yyyy_mm_dd_hh(a: str, b: str) -> int:
+def diff_yyyy_mm_dd_hh(a: Union[str, datetime.datetime], b: Union[str, datetime.datetime]) -> int:
     """
     Returns the amount of hours between datetime A and datetime B
 
@@ -209,13 +233,15 @@ def diff_yyyy_mm_dd_hh(a: str, b: str) -> int:
     -1
     >>> diff_yyyy_mm_dd_hh("2020-02-14T10:30", "2020-02-14T11:29")
     0
+    >>> diff_yyyy_mm_dd_hh(datetime.datetime(2020, 2, 14, 10, 20, 30), datetime.datetime(2020, 2, 14, 12, 20, 30))
+    2
     """
     date_a, _ = _parse(a, at_least="%Y-%m-%dT%H")
     date_b, _ = _parse(b, at_least="%Y-%m-%dT%H")
     return math.floor((date_b - date_a).total_seconds() / 3600)
 
 
-def diff_yyyy_mm_dd_hh_mm(a: str, b: str) -> int:
+def diff_yyyy_mm_dd_hh_mm(a: Union[str, datetime.datetime], b: Union[str, datetime.datetime]) -> int:
     """
     Returns the amount of minutes between datetime A and datetime B
 
@@ -227,13 +253,15 @@ def diff_yyyy_mm_dd_hh_mm(a: str, b: str) -> int:
     -1
     >>> diff_yyyy_mm_dd_hh_mm("2020-02-14T10:30", "2020-02-14T10:30:30")
     0
+    >>> diff_yyyy_mm_dd_hh_mm(datetime.datetime(2020, 2, 14, 10, 20, 30), datetime.datetime(2020, 2, 14, 10, 22, 30))
+    2
     """
     date_a, _ = _parse(a, at_least="%Y-%m-%dT%H:%M")
     date_b, _ = _parse(b, at_least="%Y-%m-%dT%H:%M")
     return math.floor((date_b - date_a).total_seconds() / 60)
 
 
-def diff_yyyy_mm_dd_hh_mm_ss(a: str, b: str) -> int:
+def diff_yyyy_mm_dd_hh_mm_ss(a: Union[str, datetime.datetime], b: Union[str, datetime.datetime]) -> int:
     """
     Returns the amount of seconds between datetime A and datetime B
 
@@ -243,13 +271,15 @@ def diff_yyyy_mm_dd_hh_mm_ss(a: str, b: str) -> int:
     31622400
     >>> diff_yyyy_mm_dd_hh_mm_ss("2020-02-14T10:20:30", "2020-02-14T10:20:29")
     -1
+    >>> diff_yyyy_mm_dd_hh_mm_ss(datetime.datetime(2020, 2, 14, 10, 20, 30), datetime.datetime(2020, 2, 14, 10, 20, 32))
+    2
     """
     date_a, _ = _parse(a, at_least="%Y-%m-%dT%H:%M:%S")
     date_b, _ = _parse(b, at_least="%Y-%m-%dT%H:%M:%S")
     return math.floor((date_b - date_a).total_seconds())
 
 
-def start_of_yyyy(yyyy_mm_dd: str) -> str:
+def start_of_yyyy(yyyy_mm_dd: Union[str, datetime.date]) -> str:
     """
     Returns first day of the year of a given date
 
@@ -257,13 +287,15 @@ def start_of_yyyy(yyyy_mm_dd: str) -> str:
     '2020-01-01'
     >>> start_of_yyyy('2020-05-14')
     '2020-01-01'
+    >>> start_of_yyyy(datetime.date(2020, 5, 14))
+    '2020-01-01'
     """
     date, _ = _parse(yyyy_mm_dd, at_least="%Y")
 
     return "%s-01-01" % date.strftime("%Y")
 
 
-def start_of_yyyy_mm(yyyy_mm_dd: str) -> str:
+def start_of_yyyy_mm(yyyy_mm_dd: Union[str, datetime.date]) -> str:
     """
     Returns first day of the month of a given date
 
@@ -271,13 +303,15 @@ def start_of_yyyy_mm(yyyy_mm_dd: str) -> str:
     '2020-05-01'
     >>> start_of_yyyy_mm('2020-05-14')
     '2020-05-01'
+    >>> start_of_yyyy_mm(datetime.date(2020, 5, 14))
+    '2020-05-01'
     """
     date, _ = _parse(yyyy_mm_dd, at_least="%Y-%m")
 
     return "%s-01" % date.strftime("%Y-%m")
 
 
-def start_of_yyyy_mm_dd(yyyy_mm_dd: str) -> str:
+def start_of_yyyy_mm_dd(yyyy_mm_dd: Union[str, datetime.date]) -> str:
     """
     Returns first datetime of the day of a given date
 
@@ -285,13 +319,15 @@ def start_of_yyyy_mm_dd(yyyy_mm_dd: str) -> str:
     '2020-05-14T00:00:00'
     >>> start_of_yyyy_mm_dd('2020-05-14T13:25:10')
     '2020-05-14T00:00:00'
+    >>> start_of_yyyy_mm_dd(datetime.date(2020, 5, 14))
+    '2020-05-14T00:00:00'
     """
     date, _ = _parse(yyyy_mm_dd, at_least="%Y-%m-%d")
 
     return "%sT00:00:00" % date.strftime("%Y-%m-%d")
 
 
-def end_of_yyyy(yyyy_mm_dd: str) -> str:
+def end_of_yyyy(yyyy_mm_dd: Union[str, datetime.date]) -> str:
     """
     Returns last day of the year of a given date
 
@@ -299,13 +335,15 @@ def end_of_yyyy(yyyy_mm_dd: str) -> str:
     '2020-12-31'
     >>> end_of_yyyy('2020-05-14')
     '2020-12-31'
+    >>> end_of_yyyy(datetime.date(2020, 5, 14))
+    '2020-12-31'
     """
     date, _ = _parse(yyyy_mm_dd, at_least="%Y")
 
     return "%s-12-31" % date.strftime("%Y")
 
 
-def end_of_yyyy_mm(yyyy_mm_dd: str) -> str:
+def end_of_yyyy_mm(yyyy_mm_dd: Union[str, datetime.date]) -> str:
     """
     Returns last day of the month of a given date
 
@@ -313,12 +351,14 @@ def end_of_yyyy_mm(yyyy_mm_dd: str) -> str:
     '2020-02-29'
     >>> end_of_yyyy_mm('2020-05-14')
     '2020-05-31'
+    >>> end_of_yyyy_mm(datetime.date(2020, 5, 14))
+    '2020-05-31'
     """
 
     return move_yyyy_mm_dd(start_of_yyyy_mm(move_yyyy_mm(yyyy_mm_dd, 1)), -1)
 
 
-def end_of_yyyy_mm_dd(yyyy_mm_dd: str) -> str:
+def end_of_yyyy_mm_dd(yyyy_mm_dd: Union[str, datetime.date]) -> str:
     """
     Returns last datetime of the day of a given date
 
@@ -326,68 +366,80 @@ def end_of_yyyy_mm_dd(yyyy_mm_dd: str) -> str:
     '2020-05-14T23:59:59'
     >>> end_of_yyyy_mm_dd('2020-05-14T13:25:10')
     '2020-05-14T23:59:59'
+    >>> end_of_yyyy_mm_dd(datetime.date(2020, 5, 14))
+    '2020-05-14T23:59:59'
     """
     date, _ = _parse(yyyy_mm_dd, at_least="%Y")
 
     return move_yyyy_mm_dd_hh_mm_ss(start_of_yyyy_mm_dd(move_yyyy_mm_dd(yyyy_mm_dd, 1)), -1)
 
 
-def yyyy(yyyy_mm_dd: str) -> str:
+def yyyy(yyyy_mm_dd: Union[str, datetime.date]) -> str:
     """
     Extracts the year of a given date
 
     >>> yyyy('2020-05-14')
+    '2020'
+    >>> yyyy(datetime.date(2020, 5, 14))
     '2020'
     """
     date, _ = _parse(yyyy_mm_dd, at_least="%Y")
     return date.strftime("%Y")
 
 
-def yyyy_mm(yyyy_mm_dd: str) -> str:
+def yyyy_mm(yyyy_mm_dd: Union[str, datetime.date]) -> str:
     """
     Extracts the year and month of a given date
 
     >>> yyyy_mm('2020-05-14')
+    '2020-05'
+    >>> yyyy_mm(datetime.date(2020, 5, 14))
     '2020-05'
     """
     date, _ = _parse(yyyy_mm_dd, at_least="%Y-%m")
     return date.strftime("%Y-%m")
 
 
-def yyyy_mm_dd(yyyy_mm_dd: str) -> str:
+def yyyy_mm_dd(yyyy_mm_dd: Union[str, datetime.date]) -> str:
     """
     Extracts the date of a given datetime
 
     >>> yyyy_mm_dd('2020-05-14T10:20:30')
+    '2020-05-14'
+    >>> yyyy_mm_dd(datetime.date(2020, 5, 14))
     '2020-05-14'
     """
     date, _ = _parse(yyyy_mm_dd, at_least="%Y-%m-%d")
     return date.strftime("%Y-%m-%d")
 
 
-def hh_mm_ss(yyyy_mm_dd: str) -> str:
+def hh_mm_ss(yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime]) -> str:
     """
     Extracts the time of a given datetime
 
     >>> hh_mm_ss('2020-05-14T10:20:30')
     '10:20:30'
+    >>> hh_mm_ss(datetime.datetime(2020, 5, 14, 10, 20, 30))
+    '10:20:30'
     """
-    date, _ = _parse(yyyy_mm_dd, at_least="%Y-%m-%dT%H:%M:%S")
+    date, _ = _parse(yyyy_mm_dd_hh_mm_ss, at_least="%Y-%m-%dT%H:%M:%S")
     return date.strftime("%H:%M:%S")
 
 
-def hh_mm(yyyy_mm_dd: str) -> str:
+def hh_mm(yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime]) -> str:
     """
     Extracts the hour and minute of a given datetime
 
     >>> hh_mm('2020-05-14T10:20:30')
     '10:20'
+    >>> hh_mm(datetime.datetime(2020, 5, 14, 10, 20, 30))
+    '10:20'
     """
-    date, _ = _parse(yyyy_mm_dd, at_least="%Y-%m-%dT%H:%M")
+    date, _ = _parse(yyyy_mm_dd_hh_mm_ss, at_least="%Y-%m-%dT%H:%M")
     return date.strftime("%H:%M")
 
 
-def year(yyyy_mm_dd: str) -> int:
+def year(yyyy_mm_dd: Union[str, datetime.date]) -> int:
     """
     Extracts the year of a given date, similar to yyyy function but returns an int
 
@@ -398,7 +450,7 @@ def year(yyyy_mm_dd: str) -> int:
     return date.year
 
 
-def month(yyyy_mm_dd: str) -> int:
+def month(yyyy_mm_dd: Union[str, datetime.date]) -> int:
     """
     Extracts the month of a given date
 
@@ -409,7 +461,7 @@ def month(yyyy_mm_dd: str) -> int:
     return date.month
 
 
-def day(yyyy_mm_dd: str) -> int:
+def day(yyyy_mm_dd: Union[str, datetime.date]) -> int:
     """
     Extracts the day of a given date
 
@@ -420,37 +472,41 @@ def day(yyyy_mm_dd: str) -> int:
     return date.day
 
 
-def hour(yyyy_mm_dd: str) -> int:
+def hour(yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime]) -> int:
     """
     Extracts the hour of a given datetime
 
     >>> hour('2020-05-14T05:10:58')
     5
     """
-    date, _ = _parse(yyyy_mm_dd, at_least="%Y-%m-%dT%H")
+    date, _ = _parse(yyyy_mm_dd_hh_mm_ss, at_least="%Y-%m-%dT%H")
     return date.hour
 
-def yyyymmdd_to_yyyy_mm_dd(yyyymmdd: str) -> str:
-    """
-    Converts a yyyymmdd date format to yyyy-mm-dd date format
 
-    >>> yyyymmdd_to_yyyy_mm_dd('20200514')
+def from_yyyymmdd(yyyymmdd: str) -> str:
+    """
+    Converts a yyyymmdd date format (no dashes) to yyyy-mm-dd date format (with dashes)
+
+    >>> from_yyyymmdd('20200514')
     '2020-05-14'
     """
     return datetime.datetime.strptime(yyyymmdd, "%Y%m%d").strftime("%Y-%m-%d")
 
 
-def yyyy_mm_dd_to_yyyymmdd(yyyy_mm_dd: str) -> str:
+def to_yyyymmdd(yyyy_mm_dd: Union[str, datetime.date]) -> str:
     """
-    Converts a yyyymmdd date format to yyyy-mm-dd date format
+    Converts any partial or full yyyy-mm-ddThh:mm:ss to yyyymmdd date format (no dashes)
 
-    >>> yyyy_mm_dd_to_yyyymmdd('2020-05-14')
+    >>> to_yyyymmdd('2020-05-14')
+    '20200514'
+    >>> to_yyyymmdd(datetime.date(2020, 5, 14))
     '20200514'
     """
-    return datetime.datetime.strptime(yyyy_mm_dd, "%Y-%m-%d").strftime("%Y%m%d")
+    date, _ = _parse(yyyy_mm_dd, at_least="%Y")
+    return date.strftime("%Y%m%d")
 
 
-def to_datetime(yyyy_mm_dd: str) -> datetime.datetime:
+def to_datetime(yyyy_mm_dd: Union[str, datetime.date]) -> datetime.datetime:
     """
     Converts any partial or full yyyy-mm-ddThh:mm:ss to python datetime
 
@@ -465,7 +521,7 @@ def to_datetime(yyyy_mm_dd: str) -> datetime.datetime:
     return date
 
 
-def _parse(yyyy_mm_dd: str, at_least: str) -> Tuple[datetime.datetime, str]:
+def _parse(yyyy_mm_dd: Union[str, datetime.date, datetime.datetime], at_least: str) -> Tuple[datetime.datetime, str]:
     """
     >>> _parse('foo', '%Y')
     Traceback (most recent call last):
@@ -482,6 +538,11 @@ def _parse(yyyy_mm_dd: str, at_least: str) -> Tuple[datetime.datetime, str]:
         ...
     ValueError: unconverted data remains: foobar
     """
+    if isinstance(yyyy_mm_dd, datetime.datetime):
+        return (yyyy_mm_dd, "%Y-%m-%dT%H:%M:%S")
+    if isinstance(yyyy_mm_dd, datetime.date):
+        return (datetime.datetime(yyyy_mm_dd.year, yyyy_mm_dd.month, yyyy_mm_dd.day), "%Y-%m-%d")
+
     pattern = ""
     match = re.match(r"(\d{4})?-?(\d{2})?-?(\d{2})?T?(\d{2})?:?(\d{2})?:?(\d{2})?", yyyy_mm_dd)
     if not match:
