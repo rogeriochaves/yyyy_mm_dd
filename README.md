@@ -12,10 +12,10 @@ RFC 3339 https://tools.ietf.org/html/rfc3339
 
 Any contributions are very welcome.
 
-The code has no dependencies. To run the tests simply execute:
+The tests are inside the docs, to run them simply execute:
 
 ```
-python -m unittest tests/test_yyyy_mm_dd.py
+python yyyy_mm_dd/__init__.py
 ```
 
 If you want to check the type hints:
@@ -29,5 +29,5 @@ If you want to regenerate docs:
 
 ```
 pip install pdoc3
-pdoc --html -o ./docs yyyy_mm_dd
+pdoc --html -o ./docs yyyy_mm_dd --force
 ```

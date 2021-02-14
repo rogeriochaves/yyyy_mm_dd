@@ -88,76 +88,212 @@ def move_yyyy_mm_dd(yyyy_mm_dd: str, by: int) -&gt; str:
 
 
 def move_yyyy_mm_dd_hh(yyyy_mm_dd_hh_mm_ss: str, by: int) -&gt; str:
+    &#34;&#34;&#34;
+    Increases or decreases a datetime by a certain number of hours
+
+    &gt;&gt;&gt; move_yyyy_mm_dd_hh(&#39;2020-12-31T23&#39;, 1)
+    &#39;2021-01-01T00&#39;
+    &gt;&gt;&gt; move_yyyy_mm_dd_hh(&#39;2020-12-31T23&#39;, -1)
+    &#39;2020-12-31T22&#39;
+    &gt;&gt;&gt; move_yyyy_mm_dd_hh(&#39;2020-02-29T10:20:30&#39;, 1)
+    &#39;2020-02-29T11:20:30&#39;
+    &#34;&#34;&#34;
     date, pattern = _parse(yyyy_mm_dd_hh_mm_ss, at_least=&#34;%Y-%m-%dT%H&#34;)
     date += relativedelta(hours=by)
     return date.strftime(pattern)
 
 
 def move_yyyy_mm_dd_hh_mm(yyyy_mm_dd_hh_mm_ss: str, by: int) -&gt; str:
+    &#34;&#34;&#34;
+    Increases or decreases a datetime by a certain number of minutes
+
+    &gt;&gt;&gt; move_yyyy_mm_dd_hh_mm(&#39;2020-12-31T23:59&#39;, 1)
+    &#39;2021-01-01T00:00&#39;
+    &gt;&gt;&gt; move_yyyy_mm_dd_hh_mm(&#39;2020-12-31T23:59&#39;, -1)
+    &#39;2020-12-31T23:58&#39;
+    &gt;&gt;&gt; move_yyyy_mm_dd_hh_mm(&#39;2020-02-29T10:20:30&#39;, 1)
+    &#39;2020-02-29T10:21:30&#39;
+    &#34;&#34;&#34;
     date, pattern = _parse(yyyy_mm_dd_hh_mm_ss, at_least=&#34;%Y-%m-%dT%H:%M&#34;)
     date += relativedelta(minutes=by)
     return date.strftime(pattern)
 
 
 def move_yyyy_mm_dd_hh_mm_ss(yyyy_mm_dd_hh_mm_ss: str, by: int) -&gt; str:
+    &#34;&#34;&#34;
+    Increases or decreases a datetime by a certain number of seconds
+
+    &gt;&gt;&gt; move_yyyy_mm_dd_hh_mm_ss(&#39;2020-12-31T23:59:59&#39;, 1)
+    &#39;2021-01-01T00:00:00&#39;
+    &gt;&gt;&gt; move_yyyy_mm_dd_hh_mm_ss(&#39;2020-12-31T23:59:59&#39;, -1)
+    &#39;2020-12-31T23:59:58&#39;
+    &#34;&#34;&#34;
     date, pattern = _parse(yyyy_mm_dd_hh_mm_ss, at_least=&#34;%Y-%m-%dT%H:%M:%S&#34;)
     date += relativedelta(seconds=by)
     return date.strftime(pattern)
 
 
 def diff_yyyy(a: str, b: str) -&gt; int:
+    &#34;&#34;&#34;
+    Returns the amount of years between date A and date B
+
+    &gt;&gt;&gt; diff_yyyy(&#34;2020&#34;, &#34;2020&#34;)
+    0
+    &gt;&gt;&gt; diff_yyyy(&#34;2020-02&#34;, &#34;2020-08&#34;)
+    0
+    &gt;&gt;&gt; diff_yyyy(&#34;2020-02-14T10:20:30&#34;, &#34;2021-02-14T10:20:30&#34;)
+    1
+    &gt;&gt;&gt; diff_yyyy(&#34;2021-02-14T10:20:30&#34;, &#34;2020-02-14T10:20:30&#34;)
+    -1
+    &#34;&#34;&#34;
     date_a, _ = _parse(a, at_least=&#34;%Y&#34;)
     date_b, _ = _parse(b, at_least=&#34;%Y&#34;)
     return relativedelta(date_b, date_a).years
 
 
 def diff_yyyy_mm(a: str, b: str) -&gt; int:
+    &#34;&#34;&#34;
+    Returns the amount of months between date A and date B
+
+    &gt;&gt;&gt; diff_yyyy_mm(&#34;2020-03&#34;, &#34;2020-04&#34;)
+    1
+    &gt;&gt;&gt; diff_yyyy_mm(&#34;2020-02-14T10:20:30&#34;, &#34;2021-02-14T10:20:30&#34;)
+    12
+    &gt;&gt;&gt; diff_yyyy_mm(&#34;2020-02-14T10:20:30&#34;, &#34;2020-01-14T10:20:30&#34;)
+    -1
+    &#34;&#34;&#34;
     date_a, _ = _parse(a, at_least=&#34;%Y-%m&#34;)
     date_b, _ = _parse(b, at_least=&#34;%Y-%m&#34;)
     return relativedelta(date_b, date_a).years * 12 + relativedelta(date_b, date_a).months
 
 
 def diff_yyyy_mm_dd(a: str, b: str) -&gt; int:
+    &#34;&#34;&#34;
+    Returns the amount of days between date A and date B
+
+    &gt;&gt;&gt; diff_yyyy_mm_dd(&#34;2020-02-01&#34;, &#34;2020-03-01&#34;)
+    29
+    &gt;&gt;&gt; diff_yyyy_mm_dd(&#34;2020-02-14T10:20:30&#34;, &#34;2021-02-14T10:20:30&#34;)
+    366
+    &gt;&gt;&gt; diff_yyyy_mm_dd(&#34;2020-02-14T10:20:30&#34;, &#34;2020-02-13T10:20:30&#34;)
+    -1
+    &gt;&gt;&gt; diff_yyyy_mm_dd(&#34;2020-02-14T10&#34;, &#34;2020-02-15T09&#34;)
+    0
+    &#34;&#34;&#34;
     date_a, _ = _parse(a, at_least=&#34;%Y-%m-%d&#34;)
     date_b, _ = _parse(b, at_least=&#34;%Y-%m-%d&#34;)
     return (date_b - date_a).days
 
 
 def diff_yyyy_mm_dd_hh(a: str, b: str) -&gt; int:
+    &#34;&#34;&#34;
+    Returns the amount of hours between datetime A and datetime B
+
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh(&#34;2020-02-01T10&#34;, &#34;2020-02-01T11&#34;)
+    1
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh(&#34;2020-02-14T10:20:30&#34;, &#34;2021-02-14T10:20:30&#34;)
+    8784
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh(&#34;2020-02-14T10:20:30&#34;, &#34;2020-02-14T09:20:30&#34;)
+    -1
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh(&#34;2020-02-14T10:30&#34;, &#34;2020-02-14T11:29&#34;)
+    0
+    &#34;&#34;&#34;
     date_a, _ = _parse(a, at_least=&#34;%Y-%m-%dT%H&#34;)
     date_b, _ = _parse(b, at_least=&#34;%Y-%m-%dT%H&#34;)
     return math.floor((date_b - date_a).total_seconds() / 3600)
 
 
 def diff_yyyy_mm_dd_hh_mm(a: str, b: str) -&gt; int:
+    &#34;&#34;&#34;
+    Returns the amount of minutes between datetime A and datetime B
+
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm(&#34;2020-02-01T10:20&#34;, &#34;2020-02-01T10:21&#34;)
+    1
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm(&#34;2020-02-14T10:20:30&#34;, &#34;2021-02-14T10:20:30&#34;)
+    527040
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm(&#34;2020-02-14T10:20:30&#34;, &#34;2020-02-14T10:19:30&#34;)
+    -1
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm(&#34;2020-02-14T10:30&#34;, &#34;2020-02-14T10:30:30&#34;)
+    0
+    &#34;&#34;&#34;
     date_a, _ = _parse(a, at_least=&#34;%Y-%m-%dT%H:%M&#34;)
     date_b, _ = _parse(b, at_least=&#34;%Y-%m-%dT%H:%M&#34;)
     return math.floor((date_b - date_a).total_seconds() / 60)
 
 
 def diff_yyyy_mm_dd_hh_mm_ss(a: str, b: str) -&gt; int:
+    &#34;&#34;&#34;
+    Returns the amount of seconds between datetime A and datetime B
+
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm_ss(&#34;2020-02-01T10:20:30&#34;, &#34;2020-02-01T10:20:31&#34;)
+    1
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm_ss(&#34;2020-02-14T10:20:30&#34;, &#34;2021-02-14T10:20:30&#34;)
+    31622400
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm_ss(&#34;2020-02-14T10:20:30&#34;, &#34;2020-02-14T10:20:29&#34;)
+    -1
+    &#34;&#34;&#34;
     date_a, _ = _parse(a, at_least=&#34;%Y-%m-%dT%H:%M:%S&#34;)
     date_b, _ = _parse(b, at_least=&#34;%Y-%m-%dT%H:%M:%S&#34;)
     return math.floor((date_b - date_a).total_seconds())
 
 
 def today() -&gt; str:
+    &#34;&#34;&#34;
+    Returns &#39;yyyy-mm-dd&#39; date for today
+
+    &gt;&gt;&gt; today() == datetime.date.today().strftime(&#34;%Y-%m-%d&#34;)
+    True
+    &#34;&#34;&#34;
     return datetime.date.today().strftime(&#34;%Y-%m-%d&#34;)
 
 
 def yesterday() -&gt; str:
+    &#34;&#34;&#34;
+    Returns &#39;yyyy-mm-dd&#39; date for yesterday
+
+    &gt;&gt;&gt; yesterday() == (datetime.date.today() - datetime.timedelta(1)).strftime(&#34;%Y-%m-%d&#34;)
+    True
+    &#34;&#34;&#34;
     return move_yyyy_mm_dd(today(), -1)
 
 
 def tomorrow() -&gt; str:
+    &#34;&#34;&#34;
+    Returns &#39;yyyy-mm-dd&#39; date for tomorrow
+
+    &gt;&gt;&gt; tomorrow() == (datetime.date.today() + datetime.timedelta(1)).strftime(&#34;%Y-%m-%d&#34;)
+    True
+    &#34;&#34;&#34;
     return move_yyyy_mm_dd(today(), 1)
 
 
 def now() -&gt; str:
+    &#34;&#34;&#34;
+    Returns current datetime as &#39;yyyy-mm-ddThh:mm:ss&#39;
+
+    &gt;&gt;&gt; now() == datetime.datetime.now().strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;)
+    True
+    &#34;&#34;&#34;
     return datetime.datetime.now().strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;)
 
 
 def _parse(yyyy_mm_dd: str, at_least: str) -&gt; Tuple[datetime.datetime, str]:
+    &#34;&#34;&#34;
+    &gt;&gt;&gt; _parse(&#39;foo&#39;, &#39;%Y&#39;)
+    Traceback (most recent call last):
+        ...
+    ValueError: Could not parse date for operation, you should provide at least %Y
+
+    &gt;&gt;&gt; _parse(&#39;2020-01&#39;, &#39;%Y-%m-%d&#39;)
+    Traceback (most recent call last):
+        ...
+    ValueError: Could not parse date for operation, you should provide at least %Y-%m-%d
+
+    &gt;&gt;&gt; _parse(&#39;2020-01-01foobar&#39;, &#39;%Y-%m-%d&#39;)
+    Traceback (most recent call last):
+        ...
+    ValueError: unconverted data remains: foobar
+    &#34;&#34;&#34;
     pattern = &#34;&#34;
     match = re.match(r&#34;(\d{4})?-?(\d{2})?-?(\d{2})?T?(\d{2})?:?(\d{2})?:?(\d{2})?&#34;, yyyy_mm_dd)
     if not match:
@@ -196,12 +332,33 @@ if __name__ == &#34;__main__&#34;:
 <span>def <span class="ident">diff_yyyy</span></span>(<span>a: str, b: str) ‑> int</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Returns the amount of years between date A and date B</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; diff_yyyy(&quot;2020&quot;, &quot;2020&quot;)
+0
+&gt;&gt;&gt; diff_yyyy(&quot;2020-02&quot;, &quot;2020-08&quot;)
+0
+&gt;&gt;&gt; diff_yyyy(&quot;2020-02-14T10:20:30&quot;, &quot;2021-02-14T10:20:30&quot;)
+1
+&gt;&gt;&gt; diff_yyyy(&quot;2021-02-14T10:20:30&quot;, &quot;2020-02-14T10:20:30&quot;)
+-1
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def diff_yyyy(a: str, b: str) -&gt; int:
+    &#34;&#34;&#34;
+    Returns the amount of years between date A and date B
+
+    &gt;&gt;&gt; diff_yyyy(&#34;2020&#34;, &#34;2020&#34;)
+    0
+    &gt;&gt;&gt; diff_yyyy(&#34;2020-02&#34;, &#34;2020-08&#34;)
+    0
+    &gt;&gt;&gt; diff_yyyy(&#34;2020-02-14T10:20:30&#34;, &#34;2021-02-14T10:20:30&#34;)
+    1
+    &gt;&gt;&gt; diff_yyyy(&#34;2021-02-14T10:20:30&#34;, &#34;2020-02-14T10:20:30&#34;)
+    -1
+    &#34;&#34;&#34;
     date_a, _ = _parse(a, at_least=&#34;%Y&#34;)
     date_b, _ = _parse(b, at_least=&#34;%Y&#34;)
     return relativedelta(date_b, date_a).years</code></pre>
@@ -211,12 +368,29 @@ if __name__ == &#34;__main__&#34;:
 <span>def <span class="ident">diff_yyyy_mm</span></span>(<span>a: str, b: str) ‑> int</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Returns the amount of months between date A and date B</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; diff_yyyy_mm(&quot;2020-03&quot;, &quot;2020-04&quot;)
+1
+&gt;&gt;&gt; diff_yyyy_mm(&quot;2020-02-14T10:20:30&quot;, &quot;2021-02-14T10:20:30&quot;)
+12
+&gt;&gt;&gt; diff_yyyy_mm(&quot;2020-02-14T10:20:30&quot;, &quot;2020-01-14T10:20:30&quot;)
+-1
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def diff_yyyy_mm(a: str, b: str) -&gt; int:
+    &#34;&#34;&#34;
+    Returns the amount of months between date A and date B
+
+    &gt;&gt;&gt; diff_yyyy_mm(&#34;2020-03&#34;, &#34;2020-04&#34;)
+    1
+    &gt;&gt;&gt; diff_yyyy_mm(&#34;2020-02-14T10:20:30&#34;, &#34;2021-02-14T10:20:30&#34;)
+    12
+    &gt;&gt;&gt; diff_yyyy_mm(&#34;2020-02-14T10:20:30&#34;, &#34;2020-01-14T10:20:30&#34;)
+    -1
+    &#34;&#34;&#34;
     date_a, _ = _parse(a, at_least=&#34;%Y-%m&#34;)
     date_b, _ = _parse(b, at_least=&#34;%Y-%m&#34;)
     return relativedelta(date_b, date_a).years * 12 + relativedelta(date_b, date_a).months</code></pre>
@@ -226,12 +400,33 @@ if __name__ == &#34;__main__&#34;:
 <span>def <span class="ident">diff_yyyy_mm_dd</span></span>(<span>a: str, b: str) ‑> int</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Returns the amount of days between date A and date B</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; diff_yyyy_mm_dd(&quot;2020-02-01&quot;, &quot;2020-03-01&quot;)
+29
+&gt;&gt;&gt; diff_yyyy_mm_dd(&quot;2020-02-14T10:20:30&quot;, &quot;2021-02-14T10:20:30&quot;)
+366
+&gt;&gt;&gt; diff_yyyy_mm_dd(&quot;2020-02-14T10:20:30&quot;, &quot;2020-02-13T10:20:30&quot;)
+-1
+&gt;&gt;&gt; diff_yyyy_mm_dd(&quot;2020-02-14T10&quot;, &quot;2020-02-15T09&quot;)
+0
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def diff_yyyy_mm_dd(a: str, b: str) -&gt; int:
+    &#34;&#34;&#34;
+    Returns the amount of days between date A and date B
+
+    &gt;&gt;&gt; diff_yyyy_mm_dd(&#34;2020-02-01&#34;, &#34;2020-03-01&#34;)
+    29
+    &gt;&gt;&gt; diff_yyyy_mm_dd(&#34;2020-02-14T10:20:30&#34;, &#34;2021-02-14T10:20:30&#34;)
+    366
+    &gt;&gt;&gt; diff_yyyy_mm_dd(&#34;2020-02-14T10:20:30&#34;, &#34;2020-02-13T10:20:30&#34;)
+    -1
+    &gt;&gt;&gt; diff_yyyy_mm_dd(&#34;2020-02-14T10&#34;, &#34;2020-02-15T09&#34;)
+    0
+    &#34;&#34;&#34;
     date_a, _ = _parse(a, at_least=&#34;%Y-%m-%d&#34;)
     date_b, _ = _parse(b, at_least=&#34;%Y-%m-%d&#34;)
     return (date_b - date_a).days</code></pre>
@@ -241,12 +436,33 @@ if __name__ == &#34;__main__&#34;:
 <span>def <span class="ident">diff_yyyy_mm_dd_hh</span></span>(<span>a: str, b: str) ‑> int</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Returns the amount of hours between datetime A and datetime B</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; diff_yyyy_mm_dd_hh(&quot;2020-02-01T10&quot;, &quot;2020-02-01T11&quot;)
+1
+&gt;&gt;&gt; diff_yyyy_mm_dd_hh(&quot;2020-02-14T10:20:30&quot;, &quot;2021-02-14T10:20:30&quot;)
+8784
+&gt;&gt;&gt; diff_yyyy_mm_dd_hh(&quot;2020-02-14T10:20:30&quot;, &quot;2020-02-14T09:20:30&quot;)
+-1
+&gt;&gt;&gt; diff_yyyy_mm_dd_hh(&quot;2020-02-14T10:30&quot;, &quot;2020-02-14T11:29&quot;)
+0
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def diff_yyyy_mm_dd_hh(a: str, b: str) -&gt; int:
+    &#34;&#34;&#34;
+    Returns the amount of hours between datetime A and datetime B
+
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh(&#34;2020-02-01T10&#34;, &#34;2020-02-01T11&#34;)
+    1
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh(&#34;2020-02-14T10:20:30&#34;, &#34;2021-02-14T10:20:30&#34;)
+    8784
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh(&#34;2020-02-14T10:20:30&#34;, &#34;2020-02-14T09:20:30&#34;)
+    -1
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh(&#34;2020-02-14T10:30&#34;, &#34;2020-02-14T11:29&#34;)
+    0
+    &#34;&#34;&#34;
     date_a, _ = _parse(a, at_least=&#34;%Y-%m-%dT%H&#34;)
     date_b, _ = _parse(b, at_least=&#34;%Y-%m-%dT%H&#34;)
     return math.floor((date_b - date_a).total_seconds() / 3600)</code></pre>
@@ -256,12 +472,33 @@ if __name__ == &#34;__main__&#34;:
 <span>def <span class="ident">diff_yyyy_mm_dd_hh_mm</span></span>(<span>a: str, b: str) ‑> int</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Returns the amount of minutes between datetime A and datetime B</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm(&quot;2020-02-01T10:20&quot;, &quot;2020-02-01T10:21&quot;)
+1
+&gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm(&quot;2020-02-14T10:20:30&quot;, &quot;2021-02-14T10:20:30&quot;)
+527040
+&gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm(&quot;2020-02-14T10:20:30&quot;, &quot;2020-02-14T10:19:30&quot;)
+-1
+&gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm(&quot;2020-02-14T10:30&quot;, &quot;2020-02-14T10:30:30&quot;)
+0
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def diff_yyyy_mm_dd_hh_mm(a: str, b: str) -&gt; int:
+    &#34;&#34;&#34;
+    Returns the amount of minutes between datetime A and datetime B
+
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm(&#34;2020-02-01T10:20&#34;, &#34;2020-02-01T10:21&#34;)
+    1
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm(&#34;2020-02-14T10:20:30&#34;, &#34;2021-02-14T10:20:30&#34;)
+    527040
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm(&#34;2020-02-14T10:20:30&#34;, &#34;2020-02-14T10:19:30&#34;)
+    -1
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm(&#34;2020-02-14T10:30&#34;, &#34;2020-02-14T10:30:30&#34;)
+    0
+    &#34;&#34;&#34;
     date_a, _ = _parse(a, at_least=&#34;%Y-%m-%dT%H:%M&#34;)
     date_b, _ = _parse(b, at_least=&#34;%Y-%m-%dT%H:%M&#34;)
     return math.floor((date_b - date_a).total_seconds() / 60)</code></pre>
@@ -271,12 +508,29 @@ if __name__ == &#34;__main__&#34;:
 <span>def <span class="ident">diff_yyyy_mm_dd_hh_mm_ss</span></span>(<span>a: str, b: str) ‑> int</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Returns the amount of seconds between datetime A and datetime B</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm_ss(&quot;2020-02-01T10:20:30&quot;, &quot;2020-02-01T10:20:31&quot;)
+1
+&gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm_ss(&quot;2020-02-14T10:20:30&quot;, &quot;2021-02-14T10:20:30&quot;)
+31622400
+&gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm_ss(&quot;2020-02-14T10:20:30&quot;, &quot;2020-02-14T10:20:29&quot;)
+-1
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def diff_yyyy_mm_dd_hh_mm_ss(a: str, b: str) -&gt; int:
+    &#34;&#34;&#34;
+    Returns the amount of seconds between datetime A and datetime B
+
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm_ss(&#34;2020-02-01T10:20:30&#34;, &#34;2020-02-01T10:20:31&#34;)
+    1
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm_ss(&#34;2020-02-14T10:20:30&#34;, &#34;2021-02-14T10:20:30&#34;)
+    31622400
+    &gt;&gt;&gt; diff_yyyy_mm_dd_hh_mm_ss(&#34;2020-02-14T10:20:30&#34;, &#34;2020-02-14T10:20:29&#34;)
+    -1
+    &#34;&#34;&#34;
     date_a, _ = _parse(a, at_least=&#34;%Y-%m-%dT%H:%M:%S&#34;)
     date_b, _ = _parse(b, at_least=&#34;%Y-%m-%dT%H:%M:%S&#34;)
     return math.floor((date_b - date_a).total_seconds())</code></pre>
@@ -394,12 +648,29 @@ if __name__ == &#34;__main__&#34;:
 <span>def <span class="ident">move_yyyy_mm_dd_hh</span></span>(<span>yyyy_mm_dd_hh_mm_ss: str, by: int) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Increases or decreases a datetime by a certain number of hours</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; move_yyyy_mm_dd_hh('2020-12-31T23', 1)
+'2021-01-01T00'
+&gt;&gt;&gt; move_yyyy_mm_dd_hh('2020-12-31T23', -1)
+'2020-12-31T22'
+&gt;&gt;&gt; move_yyyy_mm_dd_hh('2020-02-29T10:20:30', 1)
+'2020-02-29T11:20:30'
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def move_yyyy_mm_dd_hh(yyyy_mm_dd_hh_mm_ss: str, by: int) -&gt; str:
+    &#34;&#34;&#34;
+    Increases or decreases a datetime by a certain number of hours
+
+    &gt;&gt;&gt; move_yyyy_mm_dd_hh(&#39;2020-12-31T23&#39;, 1)
+    &#39;2021-01-01T00&#39;
+    &gt;&gt;&gt; move_yyyy_mm_dd_hh(&#39;2020-12-31T23&#39;, -1)
+    &#39;2020-12-31T22&#39;
+    &gt;&gt;&gt; move_yyyy_mm_dd_hh(&#39;2020-02-29T10:20:30&#39;, 1)
+    &#39;2020-02-29T11:20:30&#39;
+    &#34;&#34;&#34;
     date, pattern = _parse(yyyy_mm_dd_hh_mm_ss, at_least=&#34;%Y-%m-%dT%H&#34;)
     date += relativedelta(hours=by)
     return date.strftime(pattern)</code></pre>
@@ -409,12 +680,29 @@ if __name__ == &#34;__main__&#34;:
 <span>def <span class="ident">move_yyyy_mm_dd_hh_mm</span></span>(<span>yyyy_mm_dd_hh_mm_ss: str, by: int) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Increases or decreases a datetime by a certain number of minutes</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; move_yyyy_mm_dd_hh_mm('2020-12-31T23:59', 1)
+'2021-01-01T00:00'
+&gt;&gt;&gt; move_yyyy_mm_dd_hh_mm('2020-12-31T23:59', -1)
+'2020-12-31T23:58'
+&gt;&gt;&gt; move_yyyy_mm_dd_hh_mm('2020-02-29T10:20:30', 1)
+'2020-02-29T10:21:30'
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def move_yyyy_mm_dd_hh_mm(yyyy_mm_dd_hh_mm_ss: str, by: int) -&gt; str:
+    &#34;&#34;&#34;
+    Increases or decreases a datetime by a certain number of minutes
+
+    &gt;&gt;&gt; move_yyyy_mm_dd_hh_mm(&#39;2020-12-31T23:59&#39;, 1)
+    &#39;2021-01-01T00:00&#39;
+    &gt;&gt;&gt; move_yyyy_mm_dd_hh_mm(&#39;2020-12-31T23:59&#39;, -1)
+    &#39;2020-12-31T23:58&#39;
+    &gt;&gt;&gt; move_yyyy_mm_dd_hh_mm(&#39;2020-02-29T10:20:30&#39;, 1)
+    &#39;2020-02-29T10:21:30&#39;
+    &#34;&#34;&#34;
     date, pattern = _parse(yyyy_mm_dd_hh_mm_ss, at_least=&#34;%Y-%m-%dT%H:%M&#34;)
     date += relativedelta(minutes=by)
     return date.strftime(pattern)</code></pre>
@@ -424,12 +712,25 @@ if __name__ == &#34;__main__&#34;:
 <span>def <span class="ident">move_yyyy_mm_dd_hh_mm_ss</span></span>(<span>yyyy_mm_dd_hh_mm_ss: str, by: int) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Increases or decreases a datetime by a certain number of seconds</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; move_yyyy_mm_dd_hh_mm_ss('2020-12-31T23:59:59', 1)
+'2021-01-01T00:00:00'
+&gt;&gt;&gt; move_yyyy_mm_dd_hh_mm_ss('2020-12-31T23:59:59', -1)
+'2020-12-31T23:59:58'
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def move_yyyy_mm_dd_hh_mm_ss(yyyy_mm_dd_hh_mm_ss: str, by: int) -&gt; str:
+    &#34;&#34;&#34;
+    Increases or decreases a datetime by a certain number of seconds
+
+    &gt;&gt;&gt; move_yyyy_mm_dd_hh_mm_ss(&#39;2020-12-31T23:59:59&#39;, 1)
+    &#39;2021-01-01T00:00:00&#39;
+    &gt;&gt;&gt; move_yyyy_mm_dd_hh_mm_ss(&#39;2020-12-31T23:59:59&#39;, -1)
+    &#39;2020-12-31T23:59:58&#39;
+    &#34;&#34;&#34;
     date, pattern = _parse(yyyy_mm_dd_hh_mm_ss, at_least=&#34;%Y-%m-%dT%H:%M:%S&#34;)
     date += relativedelta(seconds=by)
     return date.strftime(pattern)</code></pre>
@@ -439,12 +740,21 @@ if __name__ == &#34;__main__&#34;:
 <span>def <span class="ident">now</span></span>(<span>) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Returns current datetime as 'yyyy-mm-ddThh:mm:ss'</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; now() == datetime.datetime.now().strftime(&quot;%Y-%m-%dT%H:%M:%S&quot;)
+True
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def now() -&gt; str:
+    &#34;&#34;&#34;
+    Returns current datetime as &#39;yyyy-mm-ddThh:mm:ss&#39;
+
+    &gt;&gt;&gt; now() == datetime.datetime.now().strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;)
+    True
+    &#34;&#34;&#34;
     return datetime.datetime.now().strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;)</code></pre>
 </details>
 </dd>
@@ -452,12 +762,21 @@ if __name__ == &#34;__main__&#34;:
 <span>def <span class="ident">today</span></span>(<span>) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Returns 'yyyy-mm-dd' date for today</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; today() == datetime.date.today().strftime(&quot;%Y-%m-%d&quot;)
+True
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def today() -&gt; str:
+    &#34;&#34;&#34;
+    Returns &#39;yyyy-mm-dd&#39; date for today
+
+    &gt;&gt;&gt; today() == datetime.date.today().strftime(&#34;%Y-%m-%d&#34;)
+    True
+    &#34;&#34;&#34;
     return datetime.date.today().strftime(&#34;%Y-%m-%d&#34;)</code></pre>
 </details>
 </dd>
@@ -465,12 +784,21 @@ if __name__ == &#34;__main__&#34;:
 <span>def <span class="ident">tomorrow</span></span>(<span>) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Returns 'yyyy-mm-dd' date for tomorrow</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; tomorrow() == (datetime.date.today() + datetime.timedelta(1)).strftime(&quot;%Y-%m-%d&quot;)
+True
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def tomorrow() -&gt; str:
+    &#34;&#34;&#34;
+    Returns &#39;yyyy-mm-dd&#39; date for tomorrow
+
+    &gt;&gt;&gt; tomorrow() == (datetime.date.today() + datetime.timedelta(1)).strftime(&#34;%Y-%m-%d&#34;)
+    True
+    &#34;&#34;&#34;
     return move_yyyy_mm_dd(today(), 1)</code></pre>
 </details>
 </dd>
@@ -478,12 +806,21 @@ if __name__ == &#34;__main__&#34;:
 <span>def <span class="ident">yesterday</span></span>(<span>) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Returns 'yyyy-mm-dd' date for yesterday</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; yesterday() == (datetime.date.today() - datetime.timedelta(1)).strftime(&quot;%Y-%m-%d&quot;)
+True
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def yesterday() -&gt; str:
+    &#34;&#34;&#34;
+    Returns &#39;yyyy-mm-dd&#39; date for yesterday
+
+    &gt;&gt;&gt; yesterday() == (datetime.date.today() - datetime.timedelta(1)).strftime(&#34;%Y-%m-%d&#34;)
+    True
+    &#34;&#34;&#34;
     return move_yyyy_mm_dd(today(), -1)</code></pre>
 </details>
 </dd>
