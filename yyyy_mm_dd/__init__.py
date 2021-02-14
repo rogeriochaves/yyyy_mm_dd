@@ -332,6 +332,105 @@ def end_of_yyyy_mm_dd(yyyy_mm_dd: str) -> str:
     return move_yyyy_mm_dd_hh_mm_ss(start_of_yyyy_mm_dd(move_yyyy_mm_dd(yyyy_mm_dd, 1)), -1)
 
 
+def yyyy(yyyy_mm_dd: str) -> str:
+    """
+    Extracts the year of a given date
+
+    >>> yyyy('2020-05-14')
+    '2020'
+    """
+    date, _ = _parse(yyyy_mm_dd, at_least="%Y")
+    return date.strftime("%Y")
+
+
+def yyyy_mm(yyyy_mm_dd: str) -> str:
+    """
+    Extracts the year and month of a given date
+
+    >>> yyyy_mm('2020-05-14')
+    '2020-05'
+    """
+    date, _ = _parse(yyyy_mm_dd, at_least="%Y-%m")
+    return date.strftime("%Y-%m")
+
+
+def yyyy_mm_dd(yyyy_mm_dd: str) -> str:
+    """
+    Extracts the date of a given datetime
+
+    >>> yyyy_mm_dd('2020-05-14T10:20:30')
+    '2020-05-14'
+    """
+    date, _ = _parse(yyyy_mm_dd, at_least="%Y-%m-%d")
+    return date.strftime("%Y-%m-%d")
+
+
+def hh_mm_ss(yyyy_mm_dd: str) -> str:
+    """
+    Extracts the time of a given datetime
+
+    >>> hh_mm_ss('2020-05-14T10:20:30')
+    '10:20:30'
+    """
+    date, _ = _parse(yyyy_mm_dd, at_least="%Y-%m-%dT%H:%M:%S")
+    return date.strftime("%H:%M:%S")
+
+
+def hh_mm(yyyy_mm_dd: str) -> str:
+    """
+    Extracts the hour and minute of a given datetime
+
+    >>> hh_mm('2020-05-14T10:20:30')
+    '10:20'
+    """
+    date, _ = _parse(yyyy_mm_dd, at_least="%Y-%m-%dT%H:%M")
+    return date.strftime("%H:%M")
+
+
+def year(yyyy_mm_dd: str) -> int:
+    """
+    Extracts the year of a given date, similar to yyyy function but returns an int
+
+    >>> year('2020-05-14')
+    2020
+    """
+    date, _ = _parse(yyyy_mm_dd, at_least="%Y")
+    return date.year
+
+
+def month(yyyy_mm_dd: str) -> int:
+    """
+    Extracts the month of a given date
+
+    >>> month('2020-05-14')
+    5
+    """
+    date, _ = _parse(yyyy_mm_dd, at_least="%Y-%m")
+    return date.month
+
+
+def day(yyyy_mm_dd: str) -> int:
+    """
+    Extracts the day of a given date
+
+    >>> day('2020-05-14')
+    14
+    """
+    date, _ = _parse(yyyy_mm_dd, at_least="%Y-%m-%d")
+    return date.day
+
+
+def hour(yyyy_mm_dd: str) -> int:
+    """
+    Extracts the hour of a given datetime
+
+    >>> hour('2020-05-14T05:10:58')
+    5
+    """
+    date, _ = _parse(yyyy_mm_dd, at_least="%Y-%m-%dT%H")
+    return date.hour
+
+
 def _parse(yyyy_mm_dd: str, at_least: str) -> Tuple[datetime.datetime, str]:
     """
     >>> _parse('foo', '%Y')

@@ -360,6 +360,105 @@ def end_of_yyyy_mm_dd(yyyy_mm_dd: str) -&gt; str:
     return move_yyyy_mm_dd_hh_mm_ss(start_of_yyyy_mm_dd(move_yyyy_mm_dd(yyyy_mm_dd, 1)), -1)
 
 
+def yyyy(yyyy_mm_dd: str) -&gt; str:
+    &#34;&#34;&#34;
+    Extracts the year of a given date
+
+    &gt;&gt;&gt; yyyy(&#39;2020-05-14&#39;)
+    &#39;2020&#39;
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
+    return date.strftime(&#34;%Y&#34;)
+
+
+def yyyy_mm(yyyy_mm_dd: str) -&gt; str:
+    &#34;&#34;&#34;
+    Extracts the year and month of a given date
+
+    &gt;&gt;&gt; yyyy_mm(&#39;2020-05-14&#39;)
+    &#39;2020-05&#39;
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m&#34;)
+    return date.strftime(&#34;%Y-%m&#34;)
+
+
+def yyyy_mm_dd(yyyy_mm_dd: str) -&gt; str:
+    &#34;&#34;&#34;
+    Extracts the date of a given datetime
+
+    &gt;&gt;&gt; yyyy_mm_dd(&#39;2020-05-14T10:20:30&#39;)
+    &#39;2020-05-14&#39;
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%d&#34;)
+    return date.strftime(&#34;%Y-%m-%d&#34;)
+
+
+def hh_mm_ss(yyyy_mm_dd: str) -&gt; str:
+    &#34;&#34;&#34;
+    Extracts the time of a given datetime
+
+    &gt;&gt;&gt; hh_mm_ss(&#39;2020-05-14T10:20:30&#39;)
+    &#39;10:20:30&#39;
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%dT%H:%M:%S&#34;)
+    return date.strftime(&#34;%H:%M:%S&#34;)
+
+
+def hh_mm(yyyy_mm_dd: str) -&gt; str:
+    &#34;&#34;&#34;
+    Extracts the hour and minute of a given datetime
+
+    &gt;&gt;&gt; hh_mm(&#39;2020-05-14T10:20:30&#39;)
+    &#39;10:20&#39;
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%dT%H:%M&#34;)
+    return date.strftime(&#34;%H:%M&#34;)
+
+
+def year(yyyy_mm_dd: str) -&gt; int:
+    &#34;&#34;&#34;
+    Extracts the year of a given date, similar to yyyy function but returns an int
+
+    &gt;&gt;&gt; year(&#39;2020-05-14&#39;)
+    2020
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
+    return date.year
+
+
+def month(yyyy_mm_dd: str) -&gt; int:
+    &#34;&#34;&#34;
+    Extracts the month of a given date
+
+    &gt;&gt;&gt; month(&#39;2020-05-14&#39;)
+    5
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m&#34;)
+    return date.month
+
+
+def day(yyyy_mm_dd: str) -&gt; int:
+    &#34;&#34;&#34;
+    Extracts the day of a given date
+
+    &gt;&gt;&gt; day(&#39;2020-05-14&#39;)
+    14
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%d&#34;)
+    return date.day
+
+
+def hour(yyyy_mm_dd: str) -&gt; int:
+    &#34;&#34;&#34;
+    Extracts the hour of a given datetime
+
+    &gt;&gt;&gt; hour(&#39;2020-05-14T05:10:58&#39;)
+    5
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%dT%H&#34;)
+    return date.hour
+
+
 def _parse(yyyy_mm_dd: str, at_least: str) -&gt; Tuple[datetime.datetime, str]:
     &#34;&#34;&#34;
     &gt;&gt;&gt; _parse(&#39;foo&#39;, &#39;%Y&#39;)
@@ -413,6 +512,29 @@ if __name__ == &#34;__main__&#34;:
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="yyyy_mm_dd.day"><code class="name flex">
+<span>def <span class="ident">day</span></span>(<span>yyyy_mm_dd: str) ‑> int</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Extracts the day of a given date</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; day('2020-05-14')
+14
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def day(yyyy_mm_dd: str) -&gt; int:
+    &#34;&#34;&#34;
+    Extracts the day of a given date
+
+    &gt;&gt;&gt; day(&#39;2020-05-14&#39;)
+    14
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%d&#34;)
+    return date.day</code></pre>
+</details>
+</dd>
 <dt id="yyyy_mm_dd.diff_yyyy"><code class="name flex">
 <span>def <span class="ident">diff_yyyy</span></span>(<span>a: str, b: str) ‑> int</span>
 </code></dt>
@@ -702,6 +824,98 @@ if __name__ == &#34;__main__&#34;:
     date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
 
     return move_yyyy_mm_dd_hh_mm_ss(start_of_yyyy_mm_dd(move_yyyy_mm_dd(yyyy_mm_dd, 1)), -1)</code></pre>
+</details>
+</dd>
+<dt id="yyyy_mm_dd.hh_mm"><code class="name flex">
+<span>def <span class="ident">hh_mm</span></span>(<span>yyyy_mm_dd: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Extracts the hour and minute of a given datetime</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; hh_mm('2020-05-14T10:20:30')
+'10:20'
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def hh_mm(yyyy_mm_dd: str) -&gt; str:
+    &#34;&#34;&#34;
+    Extracts the hour and minute of a given datetime
+
+    &gt;&gt;&gt; hh_mm(&#39;2020-05-14T10:20:30&#39;)
+    &#39;10:20&#39;
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%dT%H:%M&#34;)
+    return date.strftime(&#34;%H:%M&#34;)</code></pre>
+</details>
+</dd>
+<dt id="yyyy_mm_dd.hh_mm_ss"><code class="name flex">
+<span>def <span class="ident">hh_mm_ss</span></span>(<span>yyyy_mm_dd: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Extracts the time of a given datetime</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; hh_mm_ss('2020-05-14T10:20:30')
+'10:20:30'
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def hh_mm_ss(yyyy_mm_dd: str) -&gt; str:
+    &#34;&#34;&#34;
+    Extracts the time of a given datetime
+
+    &gt;&gt;&gt; hh_mm_ss(&#39;2020-05-14T10:20:30&#39;)
+    &#39;10:20:30&#39;
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%dT%H:%M:%S&#34;)
+    return date.strftime(&#34;%H:%M:%S&#34;)</code></pre>
+</details>
+</dd>
+<dt id="yyyy_mm_dd.hour"><code class="name flex">
+<span>def <span class="ident">hour</span></span>(<span>yyyy_mm_dd: str) ‑> int</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Extracts the hour of a given datetime</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; hour('2020-05-14T05:10:58')
+5
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def hour(yyyy_mm_dd: str) -&gt; int:
+    &#34;&#34;&#34;
+    Extracts the hour of a given datetime
+
+    &gt;&gt;&gt; hour(&#39;2020-05-14T05:10:58&#39;)
+    5
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%dT%H&#34;)
+    return date.hour</code></pre>
+</details>
+</dd>
+<dt id="yyyy_mm_dd.month"><code class="name flex">
+<span>def <span class="ident">month</span></span>(<span>yyyy_mm_dd: str) ‑> int</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Extracts the month of a given date</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; month('2020-05-14')
+5
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def month(yyyy_mm_dd: str) -&gt; int:
+    &#34;&#34;&#34;
+    Extracts the month of a given date
+
+    &gt;&gt;&gt; month(&#39;2020-05-14&#39;)
+    5
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m&#34;)
+    return date.month</code></pre>
 </details>
 </dd>
 <dt id="yyyy_mm_dd.move_yyyy"><code class="name flex">
@@ -1054,6 +1268,29 @@ True
     return move_yyyy_mm_dd(today(), 1)</code></pre>
 </details>
 </dd>
+<dt id="yyyy_mm_dd.year"><code class="name flex">
+<span>def <span class="ident">year</span></span>(<span>yyyy_mm_dd: str) ‑> int</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Extracts the year of a given date, similar to yyyy function but returns an int</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; year('2020-05-14')
+2020
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def year(yyyy_mm_dd: str) -&gt; int:
+    &#34;&#34;&#34;
+    Extracts the year of a given date, similar to yyyy function but returns an int
+
+    &gt;&gt;&gt; year(&#39;2020-05-14&#39;)
+    2020
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
+    return date.year</code></pre>
+</details>
+</dd>
 <dt id="yyyy_mm_dd.yesterday"><code class="name flex">
 <span>def <span class="ident">yesterday</span></span>(<span>) ‑> str</span>
 </code></dt>
@@ -1076,6 +1313,75 @@ True
     return move_yyyy_mm_dd(today(), -1)</code></pre>
 </details>
 </dd>
+<dt id="yyyy_mm_dd.yyyy"><code class="name flex">
+<span>def <span class="ident">yyyy</span></span>(<span>yyyy_mm_dd: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Extracts the year of a given date</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; yyyy('2020-05-14')
+'2020'
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def yyyy(yyyy_mm_dd: str) -&gt; str:
+    &#34;&#34;&#34;
+    Extracts the year of a given date
+
+    &gt;&gt;&gt; yyyy(&#39;2020-05-14&#39;)
+    &#39;2020&#39;
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
+    return date.strftime(&#34;%Y&#34;)</code></pre>
+</details>
+</dd>
+<dt id="yyyy_mm_dd.yyyy_mm"><code class="name flex">
+<span>def <span class="ident">yyyy_mm</span></span>(<span>yyyy_mm_dd: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Extracts the year and month of a given date</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; yyyy_mm('2020-05-14')
+'2020-05'
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def yyyy_mm(yyyy_mm_dd: str) -&gt; str:
+    &#34;&#34;&#34;
+    Extracts the year and month of a given date
+
+    &gt;&gt;&gt; yyyy_mm(&#39;2020-05-14&#39;)
+    &#39;2020-05&#39;
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m&#34;)
+    return date.strftime(&#34;%Y-%m&#34;)</code></pre>
+</details>
+</dd>
+<dt id="yyyy_mm_dd.yyyy_mm_dd"><code class="name flex">
+<span>def <span class="ident">yyyy_mm_dd</span></span>(<span>yyyy_mm_dd: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Extracts the date of a given datetime</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; yyyy_mm_dd('2020-05-14T10:20:30')
+'2020-05-14'
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def yyyy_mm_dd(yyyy_mm_dd: str) -&gt; str:
+    &#34;&#34;&#34;
+    Extracts the date of a given datetime
+
+    &gt;&gt;&gt; yyyy_mm_dd(&#39;2020-05-14T10:20:30&#39;)
+    &#39;2020-05-14&#39;
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%d&#34;)
+    return date.strftime(&#34;%Y-%m-%d&#34;)</code></pre>
+</details>
+</dd>
 </dl>
 </section>
 <section>
@@ -1089,6 +1395,7 @@ True
 <ul id="index">
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="yyyy_mm_dd.day" href="#yyyy_mm_dd.day">day</a></code></li>
 <li><code><a title="yyyy_mm_dd.diff_yyyy" href="#yyyy_mm_dd.diff_yyyy">diff_yyyy</a></code></li>
 <li><code><a title="yyyy_mm_dd.diff_yyyy_mm" href="#yyyy_mm_dd.diff_yyyy_mm">diff_yyyy_mm</a></code></li>
 <li><code><a title="yyyy_mm_dd.diff_yyyy_mm_dd" href="#yyyy_mm_dd.diff_yyyy_mm_dd">diff_yyyy_mm_dd</a></code></li>
@@ -1098,6 +1405,10 @@ True
 <li><code><a title="yyyy_mm_dd.end_of_yyyy" href="#yyyy_mm_dd.end_of_yyyy">end_of_yyyy</a></code></li>
 <li><code><a title="yyyy_mm_dd.end_of_yyyy_mm" href="#yyyy_mm_dd.end_of_yyyy_mm">end_of_yyyy_mm</a></code></li>
 <li><code><a title="yyyy_mm_dd.end_of_yyyy_mm_dd" href="#yyyy_mm_dd.end_of_yyyy_mm_dd">end_of_yyyy_mm_dd</a></code></li>
+<li><code><a title="yyyy_mm_dd.hh_mm" href="#yyyy_mm_dd.hh_mm">hh_mm</a></code></li>
+<li><code><a title="yyyy_mm_dd.hh_mm_ss" href="#yyyy_mm_dd.hh_mm_ss">hh_mm_ss</a></code></li>
+<li><code><a title="yyyy_mm_dd.hour" href="#yyyy_mm_dd.hour">hour</a></code></li>
+<li><code><a title="yyyy_mm_dd.month" href="#yyyy_mm_dd.month">month</a></code></li>
 <li><code><a title="yyyy_mm_dd.move_yyyy" href="#yyyy_mm_dd.move_yyyy">move_yyyy</a></code></li>
 <li><code><a title="yyyy_mm_dd.move_yyyy_mm" href="#yyyy_mm_dd.move_yyyy_mm">move_yyyy_mm</a></code></li>
 <li><code><a title="yyyy_mm_dd.move_yyyy_mm_dd" href="#yyyy_mm_dd.move_yyyy_mm_dd">move_yyyy_mm_dd</a></code></li>
@@ -1110,7 +1421,11 @@ True
 <li><code><a title="yyyy_mm_dd.start_of_yyyy_mm_dd" href="#yyyy_mm_dd.start_of_yyyy_mm_dd">start_of_yyyy_mm_dd</a></code></li>
 <li><code><a title="yyyy_mm_dd.today" href="#yyyy_mm_dd.today">today</a></code></li>
 <li><code><a title="yyyy_mm_dd.tomorrow" href="#yyyy_mm_dd.tomorrow">tomorrow</a></code></li>
+<li><code><a title="yyyy_mm_dd.year" href="#yyyy_mm_dd.year">year</a></code></li>
 <li><code><a title="yyyy_mm_dd.yesterday" href="#yyyy_mm_dd.yesterday">yesterday</a></code></li>
+<li><code><a title="yyyy_mm_dd.yyyy" href="#yyyy_mm_dd.yyyy">yyyy</a></code></li>
+<li><code><a title="yyyy_mm_dd.yyyy_mm" href="#yyyy_mm_dd.yyyy_mm">yyyy_mm</a></code></li>
+<li><code><a title="yyyy_mm_dd.yyyy_mm_dd" href="#yyyy_mm_dd.yyyy_mm_dd">yyyy_mm_dd</a></code></li>
 </ul>
 </li>
 </ul>
