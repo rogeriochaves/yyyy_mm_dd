@@ -33,6 +33,46 @@ import math
 from typing import Tuple
 
 
+def today() -&gt; str:
+    &#34;&#34;&#34;
+    Returns &#39;yyyy-mm-dd&#39; date for today
+
+    &gt;&gt;&gt; today() == datetime.date.today().strftime(&#39;%Y-%m-%d&#39;)
+    True
+    &#34;&#34;&#34;
+    return datetime.date.today().strftime(&#34;%Y-%m-%d&#34;)
+
+
+def yesterday() -&gt; str:
+    &#34;&#34;&#34;
+    Returns &#39;yyyy-mm-dd&#39; date for yesterday
+
+    &gt;&gt;&gt; yesterday() == (datetime.date.today() - datetime.timedelta(1)).strftime(&#39;%Y-%m-%d&#39;)
+    True
+    &#34;&#34;&#34;
+    return move_yyyy_mm_dd(today(), -1)
+
+
+def tomorrow() -&gt; str:
+    &#34;&#34;&#34;
+    Returns &#39;yyyy-mm-dd&#39; date for tomorrow
+
+    &gt;&gt;&gt; tomorrow() == (datetime.date.today() + datetime.timedelta(1)).strftime(&#39;%Y-%m-%d&#39;)
+    True
+    &#34;&#34;&#34;
+    return move_yyyy_mm_dd(today(), 1)
+
+
+def now() -&gt; str:
+    &#34;&#34;&#34;
+    Returns current datetime as &#39;yyyy-mm-ddThh:mm:ss&#39;
+
+    &gt;&gt;&gt; now() == datetime.datetime.now().strftime(&#39;%Y-%m-%dT%H:%M:%S&#39;)
+    True
+    &#34;&#34;&#34;
+    return datetime.datetime.now().strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;)
+
+
 def move_yyyy(yyyy_mm_dd: str, by: int) -&gt; str:
     &#34;&#34;&#34;
     Increases or decreases a date by a certain number of years
@@ -237,44 +277,87 @@ def diff_yyyy_mm_dd_hh_mm_ss(a: str, b: str) -&gt; int:
     return math.floor((date_b - date_a).total_seconds())
 
 
-def today() -&gt; str:
+def start_of_yyyy(yyyy_mm_dd: str) -&gt; str:
     &#34;&#34;&#34;
-    Returns &#39;yyyy-mm-dd&#39; date for today
+    Returns first day of the year of a given date
 
-    &gt;&gt;&gt; today() == datetime.date.today().strftime(&#34;%Y-%m-%d&#34;)
-    True
+    &gt;&gt;&gt; start_of_yyyy(&#39;2020&#39;)
+    &#39;2020-01-01&#39;
+    &gt;&gt;&gt; start_of_yyyy(&#39;2020-05-14&#39;)
+    &#39;2020-01-01&#39;
     &#34;&#34;&#34;
-    return datetime.date.today().strftime(&#34;%Y-%m-%d&#34;)
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
+
+    return &#34;%s-01-01&#34; % date.strftime(&#34;%Y&#34;)
 
 
-def yesterday() -&gt; str:
+def start_of_yyyy_mm(yyyy_mm_dd: str) -&gt; str:
     &#34;&#34;&#34;
-    Returns &#39;yyyy-mm-dd&#39; date for yesterday
+    Returns first day of the month of a given date
 
-    &gt;&gt;&gt; yesterday() == (datetime.date.today() - datetime.timedelta(1)).strftime(&#34;%Y-%m-%d&#34;)
-    True
+    &gt;&gt;&gt; start_of_yyyy_mm(&#39;2020-05&#39;)
+    &#39;2020-05-01&#39;
+    &gt;&gt;&gt; start_of_yyyy_mm(&#39;2020-05-14&#39;)
+    &#39;2020-05-01&#39;
     &#34;&#34;&#34;
-    return move_yyyy_mm_dd(today(), -1)
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m&#34;)
+
+    return &#34;%s-01&#34; % date.strftime(&#34;%Y-%m&#34;)
 
 
-def tomorrow() -&gt; str:
+def start_of_yyyy_mm_dd(yyyy_mm_dd: str) -&gt; str:
     &#34;&#34;&#34;
-    Returns &#39;yyyy-mm-dd&#39; date for tomorrow
+    Returns first datetime of the day of a given date
 
-    &gt;&gt;&gt; tomorrow() == (datetime.date.today() + datetime.timedelta(1)).strftime(&#34;%Y-%m-%d&#34;)
-    True
+    &gt;&gt;&gt; start_of_yyyy_mm_dd(&#39;2020-05-14&#39;)
+    &#39;2020-05-14T00:00:00&#39;
+    &gt;&gt;&gt; start_of_yyyy_mm_dd(&#39;2020-05-14T13:25:10&#39;)
+    &#39;2020-05-14T00:00:00&#39;
     &#34;&#34;&#34;
-    return move_yyyy_mm_dd(today(), 1)
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%d&#34;)
+
+    return &#34;%sT00:00:00&#34; % date.strftime(&#34;%Y-%m-%d&#34;)
 
 
-def now() -&gt; str:
+def end_of_yyyy(yyyy_mm_dd: str) -&gt; str:
     &#34;&#34;&#34;
-    Returns current datetime as &#39;yyyy-mm-ddThh:mm:ss&#39;
+    Returns last day of the year of a given date
 
-    &gt;&gt;&gt; now() == datetime.datetime.now().strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;)
-    True
+    &gt;&gt;&gt; end_of_yyyy(&#39;2020&#39;)
+    &#39;2020-12-31&#39;
+    &gt;&gt;&gt; end_of_yyyy(&#39;2020-05-14&#39;)
+    &#39;2020-12-31&#39;
     &#34;&#34;&#34;
-    return datetime.datetime.now().strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;)
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
+
+    return &#34;%s-12-31&#34; % date.strftime(&#34;%Y&#34;)
+
+
+def end_of_yyyy_mm(yyyy_mm_dd: str) -&gt; str:
+    &#34;&#34;&#34;
+    Returns last day of the month of a given date
+
+    &gt;&gt;&gt; end_of_yyyy_mm(&#39;2020-02&#39;)
+    &#39;2020-02-29&#39;
+    &gt;&gt;&gt; end_of_yyyy_mm(&#39;2020-05-14&#39;)
+    &#39;2020-05-31&#39;
+    &#34;&#34;&#34;
+
+    return move_yyyy_mm_dd(start_of_yyyy_mm(move_yyyy_mm(yyyy_mm_dd, 1)), -1)
+
+
+def end_of_yyyy_mm_dd(yyyy_mm_dd: str) -&gt; str:
+    &#34;&#34;&#34;
+    Returns last datetime of the day of a given date
+
+    &gt;&gt;&gt; end_of_yyyy_mm_dd(&#39;2020-05-14&#39;)
+    &#39;2020-05-14T23:59:59&#39;
+    &gt;&gt;&gt; end_of_yyyy_mm_dd(&#39;2020-05-14T13:25:10&#39;)
+    &#39;2020-05-14T23:59:59&#39;
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
+
+    return move_yyyy_mm_dd_hh_mm_ss(start_of_yyyy_mm_dd(move_yyyy_mm_dd(yyyy_mm_dd, 1)), -1)
 
 
 def _parse(yyyy_mm_dd: str, at_least: str) -&gt; Tuple[datetime.datetime, str]:
@@ -318,7 +401,9 @@ def _parse(yyyy_mm_dd: str, at_least: str) -&gt; Tuple[datetime.datetime, str]:
 
 if __name__ == &#34;__main__&#34;:
     import doctest
-    doctest.testmod()</code></pre>
+    failed, _ = doctest.testmod()
+    if failed == 0:
+        print(&#34;All doctests passing!&#34;)</code></pre>
 </details>
 </section>
 <section>
@@ -536,6 +621,89 @@ if __name__ == &#34;__main__&#34;:
     return math.floor((date_b - date_a).total_seconds())</code></pre>
 </details>
 </dd>
+<dt id="yyyy_mm_dd.end_of_yyyy"><code class="name flex">
+<span>def <span class="ident">end_of_yyyy</span></span>(<span>yyyy_mm_dd: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns last day of the year of a given date</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; end_of_yyyy('2020')
+'2020-12-31'
+&gt;&gt;&gt; end_of_yyyy('2020-05-14')
+'2020-12-31'
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def end_of_yyyy(yyyy_mm_dd: str) -&gt; str:
+    &#34;&#34;&#34;
+    Returns last day of the year of a given date
+
+    &gt;&gt;&gt; end_of_yyyy(&#39;2020&#39;)
+    &#39;2020-12-31&#39;
+    &gt;&gt;&gt; end_of_yyyy(&#39;2020-05-14&#39;)
+    &#39;2020-12-31&#39;
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
+
+    return &#34;%s-12-31&#34; % date.strftime(&#34;%Y&#34;)</code></pre>
+</details>
+</dd>
+<dt id="yyyy_mm_dd.end_of_yyyy_mm"><code class="name flex">
+<span>def <span class="ident">end_of_yyyy_mm</span></span>(<span>yyyy_mm_dd: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns last day of the month of a given date</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; end_of_yyyy_mm('2020-02')
+'2020-02-29'
+&gt;&gt;&gt; end_of_yyyy_mm('2020-05-14')
+'2020-05-31'
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def end_of_yyyy_mm(yyyy_mm_dd: str) -&gt; str:
+    &#34;&#34;&#34;
+    Returns last day of the month of a given date
+
+    &gt;&gt;&gt; end_of_yyyy_mm(&#39;2020-02&#39;)
+    &#39;2020-02-29&#39;
+    &gt;&gt;&gt; end_of_yyyy_mm(&#39;2020-05-14&#39;)
+    &#39;2020-05-31&#39;
+    &#34;&#34;&#34;
+
+    return move_yyyy_mm_dd(start_of_yyyy_mm(move_yyyy_mm(yyyy_mm_dd, 1)), -1)</code></pre>
+</details>
+</dd>
+<dt id="yyyy_mm_dd.end_of_yyyy_mm_dd"><code class="name flex">
+<span>def <span class="ident">end_of_yyyy_mm_dd</span></span>(<span>yyyy_mm_dd: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns last datetime of the day of a given date</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; end_of_yyyy_mm_dd('2020-05-14')
+'2020-05-14T23:59:59'
+&gt;&gt;&gt; end_of_yyyy_mm_dd('2020-05-14T13:25:10')
+'2020-05-14T23:59:59'
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def end_of_yyyy_mm_dd(yyyy_mm_dd: str) -&gt; str:
+    &#34;&#34;&#34;
+    Returns last datetime of the day of a given date
+
+    &gt;&gt;&gt; end_of_yyyy_mm_dd(&#39;2020-05-14&#39;)
+    &#39;2020-05-14T23:59:59&#39;
+    &gt;&gt;&gt; end_of_yyyy_mm_dd(&#39;2020-05-14T13:25:10&#39;)
+    &#39;2020-05-14T23:59:59&#39;
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
+
+    return move_yyyy_mm_dd_hh_mm_ss(start_of_yyyy_mm_dd(move_yyyy_mm_dd(yyyy_mm_dd, 1)), -1)</code></pre>
+</details>
+</dd>
 <dt id="yyyy_mm_dd.move_yyyy"><code class="name flex">
 <span>def <span class="ident">move_yyyy</span></span>(<span>yyyy_mm_dd: str, by: int) ‑> str</span>
 </code></dt>
@@ -741,7 +909,7 @@ if __name__ == &#34;__main__&#34;:
 </code></dt>
 <dd>
 <div class="desc"><p>Returns current datetime as 'yyyy-mm-ddThh:mm:ss'</p>
-<pre><code class="language-python-repl">&gt;&gt;&gt; now() == datetime.datetime.now().strftime(&quot;%Y-%m-%dT%H:%M:%S&quot;)
+<pre><code class="language-python-repl">&gt;&gt;&gt; now() == datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
 True
 </code></pre></div>
 <details class="source">
@@ -752,10 +920,94 @@ True
     &#34;&#34;&#34;
     Returns current datetime as &#39;yyyy-mm-ddThh:mm:ss&#39;
 
-    &gt;&gt;&gt; now() == datetime.datetime.now().strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;)
+    &gt;&gt;&gt; now() == datetime.datetime.now().strftime(&#39;%Y-%m-%dT%H:%M:%S&#39;)
     True
     &#34;&#34;&#34;
     return datetime.datetime.now().strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;)</code></pre>
+</details>
+</dd>
+<dt id="yyyy_mm_dd.start_of_yyyy"><code class="name flex">
+<span>def <span class="ident">start_of_yyyy</span></span>(<span>yyyy_mm_dd: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns first day of the year of a given date</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; start_of_yyyy('2020')
+'2020-01-01'
+&gt;&gt;&gt; start_of_yyyy('2020-05-14')
+'2020-01-01'
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def start_of_yyyy(yyyy_mm_dd: str) -&gt; str:
+    &#34;&#34;&#34;
+    Returns first day of the year of a given date
+
+    &gt;&gt;&gt; start_of_yyyy(&#39;2020&#39;)
+    &#39;2020-01-01&#39;
+    &gt;&gt;&gt; start_of_yyyy(&#39;2020-05-14&#39;)
+    &#39;2020-01-01&#39;
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y&#34;)
+
+    return &#34;%s-01-01&#34; % date.strftime(&#34;%Y&#34;)</code></pre>
+</details>
+</dd>
+<dt id="yyyy_mm_dd.start_of_yyyy_mm"><code class="name flex">
+<span>def <span class="ident">start_of_yyyy_mm</span></span>(<span>yyyy_mm_dd: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns first day of the month of a given date</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; start_of_yyyy_mm('2020-05')
+'2020-05-01'
+&gt;&gt;&gt; start_of_yyyy_mm('2020-05-14')
+'2020-05-01'
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def start_of_yyyy_mm(yyyy_mm_dd: str) -&gt; str:
+    &#34;&#34;&#34;
+    Returns first day of the month of a given date
+
+    &gt;&gt;&gt; start_of_yyyy_mm(&#39;2020-05&#39;)
+    &#39;2020-05-01&#39;
+    &gt;&gt;&gt; start_of_yyyy_mm(&#39;2020-05-14&#39;)
+    &#39;2020-05-01&#39;
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m&#34;)
+
+    return &#34;%s-01&#34; % date.strftime(&#34;%Y-%m&#34;)</code></pre>
+</details>
+</dd>
+<dt id="yyyy_mm_dd.start_of_yyyy_mm_dd"><code class="name flex">
+<span>def <span class="ident">start_of_yyyy_mm_dd</span></span>(<span>yyyy_mm_dd: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns first datetime of the day of a given date</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; start_of_yyyy_mm_dd('2020-05-14')
+'2020-05-14T00:00:00'
+&gt;&gt;&gt; start_of_yyyy_mm_dd('2020-05-14T13:25:10')
+'2020-05-14T00:00:00'
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def start_of_yyyy_mm_dd(yyyy_mm_dd: str) -&gt; str:
+    &#34;&#34;&#34;
+    Returns first datetime of the day of a given date
+
+    &gt;&gt;&gt; start_of_yyyy_mm_dd(&#39;2020-05-14&#39;)
+    &#39;2020-05-14T00:00:00&#39;
+    &gt;&gt;&gt; start_of_yyyy_mm_dd(&#39;2020-05-14T13:25:10&#39;)
+    &#39;2020-05-14T00:00:00&#39;
+    &#34;&#34;&#34;
+    date, _ = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%d&#34;)
+
+    return &#34;%sT00:00:00&#34; % date.strftime(&#34;%Y-%m-%d&#34;)</code></pre>
 </details>
 </dd>
 <dt id="yyyy_mm_dd.today"><code class="name flex">
@@ -763,7 +1015,7 @@ True
 </code></dt>
 <dd>
 <div class="desc"><p>Returns 'yyyy-mm-dd' date for today</p>
-<pre><code class="language-python-repl">&gt;&gt;&gt; today() == datetime.date.today().strftime(&quot;%Y-%m-%d&quot;)
+<pre><code class="language-python-repl">&gt;&gt;&gt; today() == datetime.date.today().strftime('%Y-%m-%d')
 True
 </code></pre></div>
 <details class="source">
@@ -774,7 +1026,7 @@ True
     &#34;&#34;&#34;
     Returns &#39;yyyy-mm-dd&#39; date for today
 
-    &gt;&gt;&gt; today() == datetime.date.today().strftime(&#34;%Y-%m-%d&#34;)
+    &gt;&gt;&gt; today() == datetime.date.today().strftime(&#39;%Y-%m-%d&#39;)
     True
     &#34;&#34;&#34;
     return datetime.date.today().strftime(&#34;%Y-%m-%d&#34;)</code></pre>
@@ -785,7 +1037,7 @@ True
 </code></dt>
 <dd>
 <div class="desc"><p>Returns 'yyyy-mm-dd' date for tomorrow</p>
-<pre><code class="language-python-repl">&gt;&gt;&gt; tomorrow() == (datetime.date.today() + datetime.timedelta(1)).strftime(&quot;%Y-%m-%d&quot;)
+<pre><code class="language-python-repl">&gt;&gt;&gt; tomorrow() == (datetime.date.today() + datetime.timedelta(1)).strftime('%Y-%m-%d')
 True
 </code></pre></div>
 <details class="source">
@@ -796,7 +1048,7 @@ True
     &#34;&#34;&#34;
     Returns &#39;yyyy-mm-dd&#39; date for tomorrow
 
-    &gt;&gt;&gt; tomorrow() == (datetime.date.today() + datetime.timedelta(1)).strftime(&#34;%Y-%m-%d&#34;)
+    &gt;&gt;&gt; tomorrow() == (datetime.date.today() + datetime.timedelta(1)).strftime(&#39;%Y-%m-%d&#39;)
     True
     &#34;&#34;&#34;
     return move_yyyy_mm_dd(today(), 1)</code></pre>
@@ -807,7 +1059,7 @@ True
 </code></dt>
 <dd>
 <div class="desc"><p>Returns 'yyyy-mm-dd' date for yesterday</p>
-<pre><code class="language-python-repl">&gt;&gt;&gt; yesterday() == (datetime.date.today() - datetime.timedelta(1)).strftime(&quot;%Y-%m-%d&quot;)
+<pre><code class="language-python-repl">&gt;&gt;&gt; yesterday() == (datetime.date.today() - datetime.timedelta(1)).strftime('%Y-%m-%d')
 True
 </code></pre></div>
 <details class="source">
@@ -818,7 +1070,7 @@ True
     &#34;&#34;&#34;
     Returns &#39;yyyy-mm-dd&#39; date for yesterday
 
-    &gt;&gt;&gt; yesterday() == (datetime.date.today() - datetime.timedelta(1)).strftime(&#34;%Y-%m-%d&#34;)
+    &gt;&gt;&gt; yesterday() == (datetime.date.today() - datetime.timedelta(1)).strftime(&#39;%Y-%m-%d&#39;)
     True
     &#34;&#34;&#34;
     return move_yyyy_mm_dd(today(), -1)</code></pre>
@@ -843,6 +1095,9 @@ True
 <li><code><a title="yyyy_mm_dd.diff_yyyy_mm_dd_hh" href="#yyyy_mm_dd.diff_yyyy_mm_dd_hh">diff_yyyy_mm_dd_hh</a></code></li>
 <li><code><a title="yyyy_mm_dd.diff_yyyy_mm_dd_hh_mm" href="#yyyy_mm_dd.diff_yyyy_mm_dd_hh_mm">diff_yyyy_mm_dd_hh_mm</a></code></li>
 <li><code><a title="yyyy_mm_dd.diff_yyyy_mm_dd_hh_mm_ss" href="#yyyy_mm_dd.diff_yyyy_mm_dd_hh_mm_ss">diff_yyyy_mm_dd_hh_mm_ss</a></code></li>
+<li><code><a title="yyyy_mm_dd.end_of_yyyy" href="#yyyy_mm_dd.end_of_yyyy">end_of_yyyy</a></code></li>
+<li><code><a title="yyyy_mm_dd.end_of_yyyy_mm" href="#yyyy_mm_dd.end_of_yyyy_mm">end_of_yyyy_mm</a></code></li>
+<li><code><a title="yyyy_mm_dd.end_of_yyyy_mm_dd" href="#yyyy_mm_dd.end_of_yyyy_mm_dd">end_of_yyyy_mm_dd</a></code></li>
 <li><code><a title="yyyy_mm_dd.move_yyyy" href="#yyyy_mm_dd.move_yyyy">move_yyyy</a></code></li>
 <li><code><a title="yyyy_mm_dd.move_yyyy_mm" href="#yyyy_mm_dd.move_yyyy_mm">move_yyyy_mm</a></code></li>
 <li><code><a title="yyyy_mm_dd.move_yyyy_mm_dd" href="#yyyy_mm_dd.move_yyyy_mm_dd">move_yyyy_mm_dd</a></code></li>
@@ -850,6 +1105,9 @@ True
 <li><code><a title="yyyy_mm_dd.move_yyyy_mm_dd_hh_mm" href="#yyyy_mm_dd.move_yyyy_mm_dd_hh_mm">move_yyyy_mm_dd_hh_mm</a></code></li>
 <li><code><a title="yyyy_mm_dd.move_yyyy_mm_dd_hh_mm_ss" href="#yyyy_mm_dd.move_yyyy_mm_dd_hh_mm_ss">move_yyyy_mm_dd_hh_mm_ss</a></code></li>
 <li><code><a title="yyyy_mm_dd.now" href="#yyyy_mm_dd.now">now</a></code></li>
+<li><code><a title="yyyy_mm_dd.start_of_yyyy" href="#yyyy_mm_dd.start_of_yyyy">start_of_yyyy</a></code></li>
+<li><code><a title="yyyy_mm_dd.start_of_yyyy_mm" href="#yyyy_mm_dd.start_of_yyyy_mm">start_of_yyyy_mm</a></code></li>
+<li><code><a title="yyyy_mm_dd.start_of_yyyy_mm_dd" href="#yyyy_mm_dd.start_of_yyyy_mm_dd">start_of_yyyy_mm_dd</a></code></li>
 <li><code><a title="yyyy_mm_dd.today" href="#yyyy_mm_dd.today">today</a></code></li>
 <li><code><a title="yyyy_mm_dd.tomorrow" href="#yyyy_mm_dd.tomorrow">tomorrow</a></code></li>
 <li><code><a title="yyyy_mm_dd.yesterday" href="#yyyy_mm_dd.yesterday">yesterday</a></code></li>

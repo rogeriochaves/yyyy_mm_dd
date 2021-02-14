@@ -5,6 +5,46 @@ import math
 from typing import Tuple
 
 
+def today() -> str:
+    """
+    Returns 'yyyy-mm-dd' date for today
+
+    >>> today() == datetime.date.today().strftime('%Y-%m-%d')
+    True
+    """
+    return datetime.date.today().strftime("%Y-%m-%d")
+
+
+def yesterday() -> str:
+    """
+    Returns 'yyyy-mm-dd' date for yesterday
+
+    >>> yesterday() == (datetime.date.today() - datetime.timedelta(1)).strftime('%Y-%m-%d')
+    True
+    """
+    return move_yyyy_mm_dd(today(), -1)
+
+
+def tomorrow() -> str:
+    """
+    Returns 'yyyy-mm-dd' date for tomorrow
+
+    >>> tomorrow() == (datetime.date.today() + datetime.timedelta(1)).strftime('%Y-%m-%d')
+    True
+    """
+    return move_yyyy_mm_dd(today(), 1)
+
+
+def now() -> str:
+    """
+    Returns current datetime as 'yyyy-mm-ddThh:mm:ss'
+
+    >>> now() == datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
+    True
+    """
+    return datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+
+
 def move_yyyy(yyyy_mm_dd: str, by: int) -> str:
     """
     Increases or decreases a date by a certain number of years
@@ -209,44 +249,87 @@ def diff_yyyy_mm_dd_hh_mm_ss(a: str, b: str) -> int:
     return math.floor((date_b - date_a).total_seconds())
 
 
-def today() -> str:
+def start_of_yyyy(yyyy_mm_dd: str) -> str:
     """
-    Returns 'yyyy-mm-dd' date for today
+    Returns first day of the year of a given date
 
-    >>> today() == datetime.date.today().strftime("%Y-%m-%d")
-    True
+    >>> start_of_yyyy('2020')
+    '2020-01-01'
+    >>> start_of_yyyy('2020-05-14')
+    '2020-01-01'
     """
-    return datetime.date.today().strftime("%Y-%m-%d")
+    date, _ = _parse(yyyy_mm_dd, at_least="%Y")
+
+    return "%s-01-01" % date.strftime("%Y")
 
 
-def yesterday() -> str:
+def start_of_yyyy_mm(yyyy_mm_dd: str) -> str:
     """
-    Returns 'yyyy-mm-dd' date for yesterday
+    Returns first day of the month of a given date
 
-    >>> yesterday() == (datetime.date.today() - datetime.timedelta(1)).strftime("%Y-%m-%d")
-    True
+    >>> start_of_yyyy_mm('2020-05')
+    '2020-05-01'
+    >>> start_of_yyyy_mm('2020-05-14')
+    '2020-05-01'
     """
-    return move_yyyy_mm_dd(today(), -1)
+    date, _ = _parse(yyyy_mm_dd, at_least="%Y-%m")
+
+    return "%s-01" % date.strftime("%Y-%m")
 
 
-def tomorrow() -> str:
+def start_of_yyyy_mm_dd(yyyy_mm_dd: str) -> str:
     """
-    Returns 'yyyy-mm-dd' date for tomorrow
+    Returns first datetime of the day of a given date
 
-    >>> tomorrow() == (datetime.date.today() + datetime.timedelta(1)).strftime("%Y-%m-%d")
-    True
+    >>> start_of_yyyy_mm_dd('2020-05-14')
+    '2020-05-14T00:00:00'
+    >>> start_of_yyyy_mm_dd('2020-05-14T13:25:10')
+    '2020-05-14T00:00:00'
     """
-    return move_yyyy_mm_dd(today(), 1)
+    date, _ = _parse(yyyy_mm_dd, at_least="%Y-%m-%d")
+
+    return "%sT00:00:00" % date.strftime("%Y-%m-%d")
 
 
-def now() -> str:
+def end_of_yyyy(yyyy_mm_dd: str) -> str:
     """
-    Returns current datetime as 'yyyy-mm-ddThh:mm:ss'
+    Returns last day of the year of a given date
 
-    >>> now() == datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
-    True
+    >>> end_of_yyyy('2020')
+    '2020-12-31'
+    >>> end_of_yyyy('2020-05-14')
+    '2020-12-31'
     """
-    return datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+    date, _ = _parse(yyyy_mm_dd, at_least="%Y")
+
+    return "%s-12-31" % date.strftime("%Y")
+
+
+def end_of_yyyy_mm(yyyy_mm_dd: str) -> str:
+    """
+    Returns last day of the month of a given date
+
+    >>> end_of_yyyy_mm('2020-02')
+    '2020-02-29'
+    >>> end_of_yyyy_mm('2020-05-14')
+    '2020-05-31'
+    """
+
+    return move_yyyy_mm_dd(start_of_yyyy_mm(move_yyyy_mm(yyyy_mm_dd, 1)), -1)
+
+
+def end_of_yyyy_mm_dd(yyyy_mm_dd: str) -> str:
+    """
+    Returns last datetime of the day of a given date
+
+    >>> end_of_yyyy_mm_dd('2020-05-14')
+    '2020-05-14T23:59:59'
+    >>> end_of_yyyy_mm_dd('2020-05-14T13:25:10')
+    '2020-05-14T23:59:59'
+    """
+    date, _ = _parse(yyyy_mm_dd, at_least="%Y")
+
+    return move_yyyy_mm_dd_hh_mm_ss(start_of_yyyy_mm_dd(move_yyyy_mm_dd(yyyy_mm_dd, 1)), -1)
 
 
 def _parse(yyyy_mm_dd: str, at_least: str) -> Tuple[datetime.datetime, str]:
