@@ -76,6 +76,22 @@ def diff_yyyy_mm_dd_hh_mm_ss(a: str, b: str) -> str:
     return math.floor((date_b - date_a).total_seconds())
 
 
+def today() -> str:
+    return datetime.date.today().strftime("%Y-%m-%d")
+
+
+def yesterday() -> str:
+    return move_yyyy_mm_dd(today(), -1)
+
+
+def tomorrow() -> str:
+    return move_yyyy_mm_dd(today(), 1)
+
+
+def now() -> str:
+    return datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+
+
 def _parse(yyyy_mm_dd: str, at_least: str) -> str:
     pattern = ""
     match = re.match(r"(\d{4})?-?(\d{2})?-?(\d{2})?T?(\d{2})?:?(\d{2})?:?(\d{2})?", yyyy_mm_dd)

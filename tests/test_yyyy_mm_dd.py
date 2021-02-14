@@ -1,4 +1,6 @@
 import unittest
+import datetime
+from datetime import date, timedelta
 
 from yyyy_mm_dd import *
 
@@ -76,3 +78,15 @@ class YYYYMMDDTests(unittest.TestCase):
         self.assertEqual(diff_yyyy_mm_dd_hh_mm_ss("2020-02-01T10:20:30", "2020-02-01T10:20:31"), 1)
         self.assertEqual(diff_yyyy_mm_dd_hh_mm_ss("2020-02-14T10:20:30", "2021-02-14T10:20:30"), 366 * 24 * 60 * 60)
         self.assertEqual(diff_yyyy_mm_dd_hh_mm_ss("2020-02-14T10:20:30", "2020-02-14T10:20:29"), -1)
+
+    def test_today(self):
+        self.assertEqual(today(), date.today().strftime("%Y-%m-%d"))
+
+    def test_yesterday(self):
+        self.assertEqual(yesterday(), (date.today() - timedelta(1)).strftime("%Y-%m-%d"))
+
+    def test_tomorrow(self):
+        self.assertEqual(tomorrow(), (date.today() + timedelta(1)).strftime("%Y-%m-%d"))
+
+    def test_now(self):
+        self.assertEqual(now(), datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"))
