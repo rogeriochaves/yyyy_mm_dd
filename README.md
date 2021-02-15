@@ -1,5 +1,7 @@
 # yyyy_mm_dd
 
+[![Build Status](https://img.shields.io/github/workflow/status/rogeriochaves/yyyy_mm_dd/Python%20package?style=for-the-badge)](https://github.com/rogeriochaves/yyyy_mm_dd/actions)
+
 Easy string-based date manipulation library for Python
 
 [Documentation](https://rogeriochaves.github.io/yyyy_mm_dd/yyyy_mm_dd/index.html)
