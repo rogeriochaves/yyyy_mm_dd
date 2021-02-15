@@ -57,8 +57,8 @@ def move_yyyy(yyyy_mm_dd: Union[str, datetime.date], by: int) -> Union[str, date
     '2021-02'
     >>> move_yyyy('2020-02-14', 1)
     '2021-02-14'
-    >>> move_yyyy('2020-02-14T10:20:30', 1)
-    '2021-02-14T10:20:30'
+    >>> move_yyyy('2020-02-14T10:20:30', 2)
+    '2022-02-14T10:20:30'
     >>> move_yyyy(datetime.date(2020, 2, 14), 1)
     datetime.date(2021, 2, 14)
     >>> move_yyyy(datetime.datetime(2020, 2, 14, 0, 0), 1)
@@ -77,10 +77,12 @@ def move_yyyy_mm(yyyy_mm_dd: Union[str, datetime.date], by: int) -> Union[str, d
     '2020-03'
     >>> move_yyyy_mm('2020-02', -1)
     '2020-01'
-    >>> move_yyyy_mm('2020-12-14', 1)
-    '2021-01-14'
-    >>> move_yyyy_mm('2020-02-14T10:20:30', 1)
-    '2020-03-14T10:20:30'
+    >>> move_yyyy_mm('2020-01-31', 1)
+    '2020-02-29'
+    >>> move_yyyy_mm('2020-01-31', 25)
+    '2022-02-28'
+    >>> move_yyyy_mm('2020-02-14T10:20:30', 2)
+    '2020-04-14T10:20:30'
     >>> move_yyyy_mm(datetime.date(2020, 2, 14), 1)
     datetime.date(2020, 3, 14)
     >>> move_yyyy_mm(datetime.datetime(2020, 2, 14, 0, 0), 1)
@@ -99,8 +101,8 @@ def move_yyyy_mm_dd(yyyy_mm_dd: Union[str, datetime.date], by: int) -> Union[str
     '2021-01-01'
     >>> move_yyyy_mm_dd('2020-12-31', -1)
     '2020-12-30'
-    >>> move_yyyy_mm_dd('2020-02-29T10:20:30', 1)
-    '2020-03-01T10:20:30'
+    >>> move_yyyy_mm_dd('2020-02-29T10:20:30', 2)
+    '2020-03-02T10:20:30'
     >>> move_yyyy_mm_dd(datetime.date(2020, 2, 29), 1)
     datetime.date(2020, 3, 1)
     >>> move_yyyy_mm_dd(datetime.datetime(2020, 2, 29, 0, 0), 1)
@@ -119,8 +121,8 @@ def move_yyyy_mm_dd_hh(yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime], by: i
     '2021-01-01T00'
     >>> move_yyyy_mm_dd_hh('2020-12-31T23', -1)
     '2020-12-31T22'
-    >>> move_yyyy_mm_dd_hh('2020-02-29T10:20:30', 1)
-    '2020-02-29T11:20:30'
+    >>> move_yyyy_mm_dd_hh('2020-02-29T10:20:30', 2)
+    '2020-02-29T12:20:30'
     >>> move_yyyy_mm_dd_hh(datetime.datetime(2020, 2, 29, 10, 20, 30), 1)
     datetime.datetime(2020, 2, 29, 11, 20, 30)
     """
@@ -137,8 +139,8 @@ def move_yyyy_mm_dd_hh_mm(yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime], by
     '2021-01-01T00:00'
     >>> move_yyyy_mm_dd_hh_mm('2020-12-31T23:59', -1)
     '2020-12-31T23:58'
-    >>> move_yyyy_mm_dd_hh_mm('2020-02-29T10:20:30', 1)
-    '2020-02-29T10:21:30'
+    >>> move_yyyy_mm_dd_hh_mm('2020-02-29T10:20:30', 2)
+    '2020-02-29T10:22:30'
     >>> move_yyyy_mm_dd_hh_mm(datetime.datetime(2020, 2, 29, 10, 20, 30), 1)
     datetime.datetime(2020, 2, 29, 10, 21, 30)
     """
@@ -153,8 +155,8 @@ def move_yyyy_mm_dd_hh_mm_ss(yyyy_mm_dd_hh_mm_ss: Union[str, datetime.datetime],
 
     >>> move_yyyy_mm_dd_hh_mm_ss('2020-12-31T23:59:59', 1)
     '2021-01-01T00:00:00'
-    >>> move_yyyy_mm_dd_hh_mm_ss('2020-12-31T23:59:59', -1)
-    '2020-12-31T23:59:58'
+    >>> move_yyyy_mm_dd_hh_mm_ss('2020-12-31T23:59:59', -2)
+    '2020-12-31T23:59:57'
     >>> move_yyyy_mm_dd_hh_mm_ss(datetime.datetime(2020, 2, 29, 10, 20, 30), 1)
     datetime.datetime(2020, 2, 29, 10, 20, 31)
     """
@@ -173,6 +175,8 @@ def diff_yyyy(a: Union[str, datetime.date], b: Union[str, datetime.date]) -> int
     0
     >>> diff_yyyy("2020-02-14T10:20:30", "2021-02-14T10:20:30")
     1
+    >>> diff_yyyy("2020-02-14T10:20:30", "2021-02-14T10:20:29")
+    0
     >>> diff_yyyy("2021-02-14T10:20:30", "2020-02-14T10:20:30")
     -1
     >>> diff_yyyy(datetime.date(2020, 2, 14), datetime.date(2022, 2, 14))
@@ -580,10 +584,3 @@ def _strftime(date: datetime.datetime, pattern: str) -> Union[str, datetime.date
     if pattern == "datetime":
         return date
     return date.strftime(pattern)
-
-
-if __name__ == "__main__":
-    import doctest
-    failed, _ = doctest.testmod()
-    if failed == 0:
-        print("All doctests passing!")
