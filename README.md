@@ -52,7 +52,11 @@ Check the [documentation](https://rogeriochaves.github.io/yyyy_mm_dd/yyyy_mm_dd/
 
 ## Contributing
 
-Any contributions are very welcome.
+Any contributions are very welcome. To run locally, install the dependencies:
+
+```
+pip install -r requirements.txt
+```
 
 The tests are inside the docs, to run them simply execute:
 
@@ -63,13 +67,11 @@ python -m doctest yyyy_mm_dd/__init__.py
 If you want to check the type hints:
 
 ```
-pip install mypy
 mypy yyyy_mm_dd
 ```
 
 If you want to regenerate docs:
 
 ```
-pip install pdoc3
 pdoc --html -o ./docs yyyy_mm_dd --force
 ```

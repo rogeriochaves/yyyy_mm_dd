@@ -9,4 +9,5 @@ setup(
     url="https://github.com/rogeriochaves/yyyy_mm_dd",
     license='MIT',
     python_requires='>=3.6',
+    install_requires=['python-dateutil'],
 )
