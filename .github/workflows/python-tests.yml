@@ -5,31 +5,30 @@ name: Python package
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: [3.7]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install mypy
-    - name: Typecheck with mypy
-      run: |
-        mypy yyyy_mm_dd
-    - name: Test with doctests
-      run: |
-        python -m doctest yyyy_mm_dd/__init__.py
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+      - name: Typecheck with mypy
+        run: |
+          mypy yyyy_mm_dd
+      - name: Test with doctests
+        run: |
+          python -m doctest yyyy_mm_dd/__init__.py
