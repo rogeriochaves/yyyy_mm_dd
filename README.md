@@ -17,7 +17,7 @@ If you answered yes, then you are going to love this library. In yyyy_mm_dd you 
 ```python
 >>> from yyyy_mm_dd import *
 >>> move_yyyy_mm_dd("2020-03-14", 1)
-"2020-03-15"
+'2020-03-15'
 ```
 
 There are many operations in the library that you can do with a single functions, no need to think on how to compose them, the most common operations should have a function available, for example the amount of days between two dates:
@@ -27,7 +27,7 @@ There are many operations in the library that you can do with a single functions
 2
 ```
 
-Same operations can be done at various levels, and the name is easy to remember, just using the pattern of the date itself. For example the difference in months between two dates:
+Same operations can be done at various levels, and the name is easy to remember, just using the pattern of the date itself (operation + yyyy_mm, yyyy_mm_dd, yyyy_mm_dd_hh_mm_ss, etc). For example the difference in months between two dates:
 
 ```python
 >>> diff_yyyy_mm("2020-03", "2020-07")
@@ -36,9 +36,19 @@ Same operations can be done at various levels, and the name is easy to remember,
 4
 ```
 
-DRAFT
+Or to add a month:
 
-RFC 3339 https://tools.ietf.org/html/rfc3339
+```python
+>>> move_yyyy_mm("2020-03-14", 1)
+'2020-04-14'
+```
+
+Check the [documentation](https://rogeriochaves.github.io/yyyy_mm_dd/yyyy_mm_dd/index.html) to see all functions available, and if there is an operation you regularly need to do which is not there, please [open an issue](https://github.com/rogeriochaves/yyyy_mm_dd/issues)
+
+## TODO:
+
+- Support timezones
+- Make it fully compatible with [RFC 3339](https://tools.ietf.org/html/rfc3339)
 
 ## Contributing
 
