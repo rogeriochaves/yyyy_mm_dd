@@ -6,5 +6,7 @@ setup(
     version='0.1.0',
     description='Helper functions for easy string-based manipulation of dates in python',
     author='Rogerio Chaves',
+    url="https://github.com/rogeriochaves/yyyy_mm_dd",
     license='MIT',
+    python_requires='>=3.6',
 )

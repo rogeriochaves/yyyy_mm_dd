@@ -57,7 +57,7 @@ Any contributions are very welcome.
 The tests are inside the docs, to run them simply execute:
 
 ```
-python yyyy_mm_dd/__init__.py
+python -m doctest yyyy_mm_dd/__init__.py
 ```
 
 If you want to check the type hints:
