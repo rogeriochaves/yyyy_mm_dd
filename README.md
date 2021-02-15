@@ -12,9 +12,9 @@ Easy string-based date manipulation library for Python
 
 ## Why?
 
-When writing some python code for a quick investigation in a notebook, do you also think it's a lot of boilerplate to work with dates? Like, to add +1 day to a date? Do you always have to google the solution and copy it from stackoverflow because you never remember and just want the most quick and easy solution?
+When writing some python code for a quick investigation in a notebook, do you also think it's a lot of boilerplate to work with dates? Do you always have to google the solution and copy it from stackoverflow because you never remember and just want the most quick and easy solution?
 
-If you answered yes, then you are going to love this library. In yyyy_mm_dd you can work with strings directly, no need to convert back and forth:
+If you answered yes, then you are going to love this library. In yyyy_mm_dd you can work with strings directly, no need to convert back and forth, like to add +1 day to a date:
 
 ```python
 >>> from yyyy_mm_dd import *
@@ -43,6 +43,14 @@ Or to add a month:
 ```python
 >>> move_yyyy_mm("2020-03-14", 1)
 '2020-04-14'
+```
+
+But not only strings, you can also pass a datetime as argument in case you already have it, and there is no need for any conversion:
+
+```python
+>>> import datetime
+>>> move_yyyy_mm_dd_hh(datetime.datetime(2020, 3, 14, 5, 0), 1)
+datetime.datetime(2020, 3, 14, 6, 0)
 ```
 
 Check the [documentation](https://rogeriochaves.github.io/yyyy_mm_dd/yyyy_mm_dd/index.html) to see all functions available, and if there is an operation you regularly need to do which is not there, please [open an issue](https://github.com/rogeriochaves/yyyy_mm_dd/issues)
