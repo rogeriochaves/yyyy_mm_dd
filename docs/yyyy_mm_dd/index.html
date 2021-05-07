@@ -367,6 +367,39 @@ def start_of_yyyy_mm_dd(yyyy_mm_dd: Union[str, datetime.date]) -&gt; Union[str, 
     return date.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;)
 
 
+def start_of_yyyy_mm_dd_hh(yyyy_mm_dd: Union[str, datetime.datetime]) -&gt; Union[str, datetime.datetime]:
+    &#34;&#34;&#34;
+    Returns the start of the hour of a given datetime
+
+    &gt;&gt;&gt; start_of_yyyy_mm_dd_hh(&#39;2020-05-14T13:25:10&#39;)
+    &#39;2020-05-14T13:00:00&#39;
+    &gt;&gt;&gt; start_of_yyyy_mm_dd_hh(datetime.datetime(2020, 5, 14, 23, 59))
+    datetime.datetime(2020, 5, 14, 23, 0)
+    &#34;&#34;&#34;
+    date, pattern = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%dT%H&#34;)
+    date = datetime.datetime(date.year, date.month, date.day, date.hour, 0)
+    if pattern in [&#34;date&#34;, &#34;datetime&#34;]:
+        return date
+    return date.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;)
+
+
+def start_of_yyyy_mm_dd_hh_mm(yyyy_mm_dd: Union[str, datetime.datetime]) -&gt; Union[str, datetime.datetime]:
+    &#34;&#34;&#34;
+    Returns the same datetime but with seconds at 0
+
+    &gt;&gt;&gt; start_of_yyyy_mm_dd_hh_mm(&#39;2020-05-14T13:25:10&#39;)
+    &#39;2020-05-14T13:25:00&#39;
+    &gt;&gt;&gt; start_of_yyyy_mm_dd_hh_mm(datetime.datetime(2020, 5, 14, 23, 59, 59))
+    datetime.datetime(2020, 5, 14, 23, 59)
+    &#34;&#34;&#34;
+    date, pattern = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%dT%H:%M&#34;)
+    date = datetime.datetime(date.year, date.month,
+                             date.day, date.hour, date.minute)
+    if pattern in [&#34;date&#34;, &#34;datetime&#34;]:
+        return date
+    return date.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;)
+
+
 def end_of_yyyy(yyyy_mm_dd: Union[str, datetime.date]) -&gt; Union[str, datetime.date]:
     &#34;&#34;&#34;
     Returns last day of the year of a given date
@@ -584,9 +617,11 @@ def _parse(yyyy_mm_dd: Union[str, datetime.date, datetime.datetime], at_least: s
         return (datetime.datetime(yyyy_mm_dd.year, yyyy_mm_dd.month, yyyy_mm_dd.day), &#34;datetime&#34; if &#34;%H&#34; in at_least else &#34;date&#34;)
 
     pattern = &#34;&#34;
-    match = re.match(r&#34;(\d{4})?-?(\d{2})?-?(\d{2})?T?(\d{2})?:?(\d{2})?:?(\d{2})?&#34;, yyyy_mm_dd)
+    match = re.match(
+        r&#34;(\d{4})?-?(\d{2})?-?(\d{2})?T?(\d{2})?:?(\d{2})?:?(\d{2})?&#34;, yyyy_mm_dd)
     if not match:
-        raise ValueError(&#34;Could not parse date, it should be in YYYY-MM-DDTHH:MM:SS format&#34;)
+        raise ValueError(
+            &#34;Could not parse date, it should be in YYYY-MM-DDTHH:MM:SS format&#34;)
     year, month, day, hour, minute, second = match.groups()
     if year is not None:
         pattern += &#34;%Y&#34;
@@ -601,7 +636,8 @@ def _parse(yyyy_mm_dd: Union[str, datetime.date, datetime.datetime], at_least: s
     if second is not None:
         pattern += &#34;:%S&#34;
     if at_least not in pattern:
-        raise ValueError(&#34;Could not parse date for operation, you should provide at least %s&#34; % at_least)
+        raise ValueError(
+            &#34;Could not parse date for operation, you should provide at least %s&#34; % at_least)
 
     return (datetime.datetime.strptime(yyyy_mm_dd, pattern), pattern)
 
@@ -1463,6 +1499,67 @@ datetime.datetime(2020, 5, 14, 0, 0)
     return date.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;)</code></pre>
 </details>
 </dd>
+<dt id="yyyy_mm_dd.start_of_yyyy_mm_dd_hh"><code class="name flex">
+<span>def <span class="ident">start_of_yyyy_mm_dd_hh</span></span>(<span>yyyy_mm_dd: Union[str, datetime.datetime]) ‑> Union[str, datetime.datetime]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns the start of the hour of a given datetime</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; start_of_yyyy_mm_dd_hh('2020-05-14T13:25:10')
+'2020-05-14T13:00:00'
+&gt;&gt;&gt; start_of_yyyy_mm_dd_hh(datetime.datetime(2020, 5, 14, 23, 59))
+datetime.datetime(2020, 5, 14, 23, 0)
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def start_of_yyyy_mm_dd_hh(yyyy_mm_dd: Union[str, datetime.datetime]) -&gt; Union[str, datetime.datetime]:
+    &#34;&#34;&#34;
+    Returns the start of the hour of a given datetime
+
+    &gt;&gt;&gt; start_of_yyyy_mm_dd_hh(&#39;2020-05-14T13:25:10&#39;)
+    &#39;2020-05-14T13:00:00&#39;
+    &gt;&gt;&gt; start_of_yyyy_mm_dd_hh(datetime.datetime(2020, 5, 14, 23, 59))
+    datetime.datetime(2020, 5, 14, 23, 0)
+    &#34;&#34;&#34;
+    date, pattern = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%dT%H&#34;)
+    date = datetime.datetime(date.year, date.month, date.day, date.hour, 0)
+    if pattern in [&#34;date&#34;, &#34;datetime&#34;]:
+        return date
+    return date.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;)</code></pre>
+</details>
+</dd>
+<dt id="yyyy_mm_dd.start_of_yyyy_mm_dd_hh_mm"><code class="name flex">
+<span>def <span class="ident">start_of_yyyy_mm_dd_hh_mm</span></span>(<span>yyyy_mm_dd: Union[str, datetime.datetime]) ‑> Union[str, datetime.datetime]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns the same datetime but with seconds at 0</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; start_of_yyyy_mm_dd_hh_mm('2020-05-14T13:25:10')
+'2020-05-14T13:25:00'
+&gt;&gt;&gt; start_of_yyyy_mm_dd_hh_mm(datetime.datetime(2020, 5, 14, 23, 59, 59))
+datetime.datetime(2020, 5, 14, 23, 59)
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def start_of_yyyy_mm_dd_hh_mm(yyyy_mm_dd: Union[str, datetime.datetime]) -&gt; Union[str, datetime.datetime]:
+    &#34;&#34;&#34;
+    Returns the same datetime but with seconds at 0
+
+    &gt;&gt;&gt; start_of_yyyy_mm_dd_hh_mm(&#39;2020-05-14T13:25:10&#39;)
+    &#39;2020-05-14T13:25:00&#39;
+    &gt;&gt;&gt; start_of_yyyy_mm_dd_hh_mm(datetime.datetime(2020, 5, 14, 23, 59, 59))
+    datetime.datetime(2020, 5, 14, 23, 59)
+    &#34;&#34;&#34;
+    date, pattern = _parse(yyyy_mm_dd, at_least=&#34;%Y-%m-%dT%H:%M&#34;)
+    date = datetime.datetime(date.year, date.month,
+                             date.day, date.hour, date.minute)
+    if pattern in [&#34;date&#34;, &#34;datetime&#34;]:
+        return date
+    return date.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;)</code></pre>
+</details>
+</dd>
 <dt id="yyyy_mm_dd.to_datetime"><code class="name flex">
 <span>def <span class="ident">to_datetime</span></span>(<span>yyyy_mm_dd: Union[str, datetime.date]) ‑> datetime.datetime</span>
 </code></dt>
@@ -1729,6 +1826,8 @@ True
 <li><code><a title="yyyy_mm_dd.start_of_yyyy" href="#yyyy_mm_dd.start_of_yyyy">start_of_yyyy</a></code></li>
 <li><code><a title="yyyy_mm_dd.start_of_yyyy_mm" href="#yyyy_mm_dd.start_of_yyyy_mm">start_of_yyyy_mm</a></code></li>
 <li><code><a title="yyyy_mm_dd.start_of_yyyy_mm_dd" href="#yyyy_mm_dd.start_of_yyyy_mm_dd">start_of_yyyy_mm_dd</a></code></li>
+<li><code><a title="yyyy_mm_dd.start_of_yyyy_mm_dd_hh" href="#yyyy_mm_dd.start_of_yyyy_mm_dd_hh">start_of_yyyy_mm_dd_hh</a></code></li>
+<li><code><a title="yyyy_mm_dd.start_of_yyyy_mm_dd_hh_mm" href="#yyyy_mm_dd.start_of_yyyy_mm_dd_hh_mm">start_of_yyyy_mm_dd_hh_mm</a></code></li>
 <li><code><a title="yyyy_mm_dd.to_datetime" href="#yyyy_mm_dd.to_datetime">to_datetime</a></code></li>
 <li><code><a title="yyyy_mm_dd.to_yyyymmdd" href="#yyyy_mm_dd.to_yyyymmdd">to_yyyymmdd</a></code></li>
 <li><code><a title="yyyy_mm_dd.today" href="#yyyy_mm_dd.today">today</a></code></li>

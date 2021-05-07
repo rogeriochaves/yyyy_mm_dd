@@ -339,6 +339,39 @@ def start_of_yyyy_mm_dd(yyyy_mm_dd: Union[str, datetime.date]) -> Union[str, dat
     return date.strftime("%Y-%m-%dT%H:%M:%S")
 
 
+def start_of_yyyy_mm_dd_hh(yyyy_mm_dd: Union[str, datetime.datetime]) -> Union[str, datetime.datetime]:
+    """
+    Returns the start of the hour of a given datetime
+
+    >>> start_of_yyyy_mm_dd_hh('2020-05-14T13:25:10')
+    '2020-05-14T13:00:00'
+    >>> start_of_yyyy_mm_dd_hh(datetime.datetime(2020, 5, 14, 23, 59))
+    datetime.datetime(2020, 5, 14, 23, 0)
+    """
+    date, pattern = _parse(yyyy_mm_dd, at_least="%Y-%m-%dT%H")
+    date = datetime.datetime(date.year, date.month, date.day, date.hour, 0)
+    if pattern in ["date", "datetime"]:
+        return date
+    return date.strftime("%Y-%m-%dT%H:%M:%S")
+
+
+def start_of_yyyy_mm_dd_hh_mm(yyyy_mm_dd: Union[str, datetime.datetime]) -> Union[str, datetime.datetime]:
+    """
+    Returns the same datetime but with seconds at 0
+
+    >>> start_of_yyyy_mm_dd_hh_mm('2020-05-14T13:25:10')
+    '2020-05-14T13:25:00'
+    >>> start_of_yyyy_mm_dd_hh_mm(datetime.datetime(2020, 5, 14, 23, 59, 59))
+    datetime.datetime(2020, 5, 14, 23, 59)
+    """
+    date, pattern = _parse(yyyy_mm_dd, at_least="%Y-%m-%dT%H:%M")
+    date = datetime.datetime(date.year, date.month,
+                             date.day, date.hour, date.minute)
+    if pattern in ["date", "datetime"]:
+        return date
+    return date.strftime("%Y-%m-%dT%H:%M:%S")
+
+
 def end_of_yyyy(yyyy_mm_dd: Union[str, datetime.date]) -> Union[str, datetime.date]:
     """
     Returns last day of the year of a given date
@@ -556,9 +589,11 @@ def _parse(yyyy_mm_dd: Union[str, datetime.date, datetime.datetime], at_least: s
         return (datetime.datetime(yyyy_mm_dd.year, yyyy_mm_dd.month, yyyy_mm_dd.day), "datetime" if "%H" in at_least else "date")
 
     pattern = ""
-    match = re.match(r"(\d{4})?-?(\d{2})?-?(\d{2})?T?(\d{2})?:?(\d{2})?:?(\d{2})?", yyyy_mm_dd)
+    match = re.match(
+        r"(\d{4})?-?(\d{2})?-?(\d{2})?T?(\d{2})?:?(\d{2})?:?(\d{2})?", yyyy_mm_dd)
     if not match:
-        raise ValueError("Could not parse date, it should be in YYYY-MM-DDTHH:MM:SS format")
+        raise ValueError(
+            "Could not parse date, it should be in YYYY-MM-DDTHH:MM:SS format")
     year, month, day, hour, minute, second = match.groups()
     if year is not None:
         pattern += "%Y"
@@ -573,7 +608,8 @@ def _parse(yyyy_mm_dd: Union[str, datetime.date, datetime.datetime], at_least: s
     if second is not None:
         pattern += ":%S"
     if at_least not in pattern:
-        raise ValueError("Could not parse date for operation, you should provide at least %s" % at_least)
+        raise ValueError(
+            "Could not parse date for operation, you should provide at least %s" % at_least)
 
     return (datetime.datetime.strptime(yyyy_mm_dd, pattern), pattern)
 
